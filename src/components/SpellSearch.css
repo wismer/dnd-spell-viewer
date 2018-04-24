@@ -1,0 +1,34 @@
+#spell-search-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: left;
+}
+
+.spell-card {
+  margin: 10px;
+  box-shadow: 2px 2px 2px 2px #878084;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spell-school {
+  flex-grow: 1;
+}
+
+.spell-card h3 {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.spell-level {
+  border: 1px solid black;
+  border-radius: 25% 10%;
+  background-color: black;
+  color: white;
+  font-size: 2em;
+  width: 50px;
+  text-align: center;
+  align-self: flex-end;
+}
