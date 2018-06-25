@@ -69,8 +69,6 @@ export function spellSearcher(state: QueryState, action: AnyAction): QueryState 
   if (typeof state === 'undefined') {
     return initialState;
   }
-  
-  console.log(state, action);
 
   switch (action.type) {
     case QUERY_ADD:

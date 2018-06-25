@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Spell, QueryState } from '../typings';
+import { Spell, AppState } from '../typings';
 import './SpellSearch.css';
  
 interface SearchComponentProps { 
@@ -50,8 +50,8 @@ class SpellSearch extends React.Component<SearchComponentProps, {}> {
   }
 }
 
-const mapStateToProps = (state: QueryState) => {
-  return { results: state.searchResults };
+const mapStateToProps = (state: AppState) => {
+  return { results: state.spellSearcher.searchResults };
 }
 
 export default connect(mapStateToProps)(SpellSearch);

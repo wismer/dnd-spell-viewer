@@ -1,0 +1,18 @@
+.char-builder-container {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 1fr;
+  grid-template-areas:
+    "attr-col skills-col races-col equip-col"
+}
+
+#skill-list {
+  grid-area: skills-col;
+}
+
+#equipment {
+  grid-area: equip-col;
+}
+
+#races {
+  grid-area: races-col;
+}

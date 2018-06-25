@@ -3,11 +3,12 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { spellSearcher } from './reducers';
+import { characterBuilder } from './character-builder/reducers';
 import { Provider } from 'react-redux';
 
-const store = createStore(spellSearcher);
+const store = createStore(combineReducers({spellSearcher, characterBuilder}));
 
 
 ReactDOM.render(

@@ -3,6 +3,8 @@ import * as React from 'react';
 import './App.css';
 import SpellSearch from './components/SpellSearch';
 import SpellSearchBar from './components/SpellSearchBar';
+import CharacterBuilder from './components/character-builder/CharacterBuilder';
+
 
 import { insertSpell } from './reducers';
 import { SpellLookup, Spell, SpellStore, QueryState, AppProps, AppDispatchProps } from './typings';
@@ -39,6 +41,7 @@ class App extends React.Component<AppProps & AppDispatchProps> {
       <div className="App">
         <SpellSearchBar />
         <SpellSearch />
+        <CharacterBuilder />
       </div>
     );
   }
