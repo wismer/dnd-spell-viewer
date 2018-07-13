@@ -11,6 +11,7 @@ export interface AppProps {
   searchResults?: SpellResult;
 }
 
+
 export interface SpellLookup {
   spell?: number,
   [propName: string]: any
@@ -119,6 +120,7 @@ export interface CharacterBuildState {
   activeAttribute: AttributeName | null;
   currentClass: PrimaryClass | null;
   currentSubClass: SubClass | null;
+  activeSpotlight: string | null;
 }
 
 type FaerunRaces = 'Elf' | 'Dwarf' | 'Tiefling' | 'Gnome' | 'Halfling';
@@ -139,5 +141,39 @@ export interface Skill {
 export type PrimaryClassChoice = 'Fighter' | 'Paladin' | 'Wizard' | 'Sorcerer' | 'Ranger' | 'Bard' | 'Druid' | 'Thief' | 'Monk' | 'Cleric';
 // export type PrimaryClassChoices = Fighter | Paladin | Wizard | Sorcerer | Ranger | Bard | Druid | Thief | Monk;
 export type AttributeName = 'dexterity' | 'strength' | 'intelligence' | 'charisma' | 'wisdom' | 'constitution';
-export type SkillName = 'Investigation' | 'History' | 'Perception' | 'Intimidation' | 'Arcana' | 'Acrobatics' | 'Medicine' | 'Insight' | 'Persuasion' | 'Religion';
+export type SkillName = 'Investigation' | 'History' | 'Perception' | 'Intimidation' | 'Arcana' | 'Acrobatics' | 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 export type ArmorClass = 'light' | 'medium' | 'heavy';
+
+
+
+// REACT COMPONENT TYPES
+
+
+export interface TOCButtonProps {
+  label: string;
+  expanded: boolean;
+}
+
+export interface TOCCategory {
+  label: string;
+  subItems: TOCCategory[];
+}
+
+export interface TOCProps {
+  categories: TOCCategory[];
+  skillNames: SkillName[];
+  activeSpotlight: string | null;
+}
+
+export interface TOCDispatch {
+  changeSpotlight(className: string): void;
+}
+
+// React Router Types
+
+export interface RouteType {
+  path: string;
+  component: React.ComponentClass;
+  exact?: boolean;
+  routes?: RouteType[];
+}

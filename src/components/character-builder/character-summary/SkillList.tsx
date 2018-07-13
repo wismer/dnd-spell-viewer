@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Skill, AppState } from '../../typings';
+import { Skill, AppState } from '../../../typings';
 import { Dispatch } from 'redux';
-import { trainSkill } from '../../character-builder/actions';
-
+import { trainSkill } from '../../../character-builder/actions';
+import './SkillList.css';
+import { Link } from 'react-router-dom';
 
 interface SkillListDispatch {
   trainSkill(skill: Skill): void;
@@ -16,18 +17,20 @@ interface SkillListProps {
 class SkillList extends React.Component<SkillListDispatch & SkillListProps, {}> {
   public render() {
     const skills = this.props.skills.map((skill: Skill, idx: number) => {
-      const onClick = this.props.trainSkill.bind(null, skill);
+      // const onClick = this.props.trainSkill.bind(null, skill);
       return (
-        <li onClick={onClick} key={idx} className='skill-item'>
-          <div>{skill.name}</div>
-          <div>{skill.value}</div>
-          <div>{skill.isProficient}</div>
-        </li>
+        <>
+          <div key={`${skill.name}-${idx}`}>{skill.isProficient ? "■" : "□"}</div>
+          <div key={idx}>{skill.value}</div>
+          <div className='skill-name' key={skill.name}>
+            <Link to={`/skills#${skill.name.toLowerCase().replace(/\s+/g, '-')}`}>{skill.name}</Link>
+          </div>
+        </>
       );
     });
     return (
       <div id='skill-list'>
-        {skills}
+        <>{skills}</>
       </div>
     );
   }

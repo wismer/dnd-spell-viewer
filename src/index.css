@@ -3,3 +3,16 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+#char-builder {
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr;
+}
+
+#char-builder > section {
+  padding: 20px;
+}
+
+article {
+  padding: 20px;
+}

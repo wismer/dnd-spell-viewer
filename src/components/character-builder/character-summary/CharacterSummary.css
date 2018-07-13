@@ -1,0 +1,85 @@
+.ability > a, .ability > a:visited {
+  text-decoration: none;
+  color: #fafcfc;
+  display: block;
+  line-height: 60px;
+}
+
+.ability-modifier {
+  line-height: 10px;
+  font-size: 10px;
+  padding-bottom: 10px;
+}
+
+#ability-character {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  vertical-align: center;
+  text-align: center;
+  font-size: 2em;
+  font-weight: 100;
+  grid-template-areas:
+    "ability-inc ability ability ability ability ability ability"
+    "ability-dec ability ability ability ability ability ability";
+}
+
+.god-dammit {
+  display: flex;
+  flex-flow: column;
+}
+
+.ability-short {
+  padding-top: 10px;
+  line-height: 10px;
+  font-size: 12px;
+}
+
+.ability {
+  cursor: pointer;
+  grid: "ability";
+  grid-row-start: 1;
+  grid-row-end: 3;
+  background-color: #4c555a;
+}
+
+.ability:hover {
+  background-color: lighten(#4c555a, 50%);
+}
+
+.ability.active-ability, .ability.active-ability > a:visited {
+  background-color: #fafcfc;
+  color: #4c555a;
+}
+
+#ability-inc {
+  grid: "ability-inc";
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  background-color: #7e2c2c;
+}
+
+#ability-dec {
+  grid: "ability-dec";
+  grid-column-start: 1;
+  grid-column-end: 1;
+  background-color: #590111;
+}
+
+.ability-change {
+  color: white;
+  cursor: pointer;
+  border: black;
+  font-size: 1em;
+  font-weight: 100;
+}
+
+#character-summary {
+  background-color: #363636;
+  height: 100%;
+}
+
+#skills {
+  padding: 20px;
+}

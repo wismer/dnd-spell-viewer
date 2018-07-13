@@ -13,16 +13,20 @@ export function deselectRace(): AnyAction {
   return { type: 'CHANGE_RACE', race: null };
 }
 
-export function increaseAttribute(attribute: AttributeName): AnyAction {
-  return { type: 'ATTR_INC', attribute };
+export function increaseAttribute(path: string | null): AnyAction {
+  return { type: 'ATTR_INC', path };
 }
 
-export function decreaseAttribute(attribute: AttributeName): AnyAction {
-  return { type: 'ATTR_DEC', attribute };
+export function decreaseAttribute(path: string | null): AnyAction {
+  return { type: 'ATTR_DEC', path };
 }
 
 export function trainSkill(skill: SkillName): AnyAction {
   return { type: 'TRAIN_SKILL', skill };
+}
+
+export function changeSpotlight(className: string): AnyAction {
+  return { type: 'CHANGE_SPOTLIGHT', className };
 }
 
 export function activateAttribute(attribute: AttributeName): AnyAction {

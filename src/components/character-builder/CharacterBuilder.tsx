@@ -2,21 +2,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AttributeName, SkillName, CharacterAttribute, Race, Skill, AppState } from '../../typings';
 import { Dispatch } from 'redux';
-import { changeRace, increaseAttribute, decreaseAttribute, trainSkill } from '../../character-builder/actions';
+import { changeRace, increaseAttribute, decreaseAttribute, trainSkill, changeSpotlight } from '../../character-builder/actions';
 import { ALL_RACES } from '../../character-builder/constants';
-import SkillList from './SkillList';
-import AttributeList from './AttributeList';
 import './CharacterBuilder.css';
 
 interface CharacterBuilderContainerDispatch {
   changeAttribute(attribute: AttributeName, increase: boolean): void;
   changeRace(race: string): void;
   trainSkill(skill: SkillName): void;
+  changeSpotlight(className: string): void;
 }
 
 interface CharacterBuilderContainerProps {
   races: Race[];
   skills: Skill[];
+  activeSpotlight: string | null;
   race: Race | null;
   availablePoints: number;
   attributes: CharacterAttribute[];
@@ -24,36 +24,11 @@ interface CharacterBuilderContainerProps {
 
 type CharacterBuilderProps = CharacterBuilderContainerDispatch & CharacterBuilderContainerProps;
 
-
 class CharacterBuilderContainer extends React.Component<CharacterBuilderProps, {}> {
   public render() {
-    const races = this.props.races.map((race: Race, idx: number) => {
-      const onClick = this.props.changeRace.bind(null, race.name);
-      return (
-        <li onClick={onClick} className='race-item' key={idx}>
-          <div>{race.name}</div>
-        </li>
-      );
-    });
     return (
       <div className='char-builder-container'>
-        <AttributeList>
-          <div className='attr-panel'>
-            <div>
-              <i className='fas fa-plus'/>
-            </div>
-            <div>
-              <i className='fas fa-minus'/>
-            </div>
-          </div>
-        </AttributeList>
-
-        <div id='races'>
-          {races}
-        </div>
-
-        <SkillList />
-        <div id='equipment' />
+        blergh
       </div>
     );
   }
@@ -65,9 +40,9 @@ const DispatchProps = (dispatch: Dispatch<AppState>): CharacterBuilderContainerD
   return {
     changeAttribute(attribute: AttributeName, increase: boolean) {
       if (increase) {
-        dispatch(increaseAttribute(attribute));
+        dispatch(increaseAttribute('a'));
       } else {
-        dispatch(decreaseAttribute(attribute));
+        dispatch(decreaseAttribute('a'));
       }
     },
 
@@ -77,6 +52,10 @@ const DispatchProps = (dispatch: Dispatch<AppState>): CharacterBuilderContainerD
 
     trainSkill(skill: SkillName) {
       dispatch(trainSkill(skill));
+    },
+
+    changeSpotlight(className: string) {
+      dispatch(changeSpotlight(className));
     }
   };
 }
@@ -87,7 +66,8 @@ const containerProps = (state: AppState): CharacterBuilderContainerProps => {
     race: state.characterBuilder.race,
     skills: state.characterBuilder.skills,
     attributes: state.characterBuilder.attributes,
-    availablePoints: state.characterBuilder.availablePoints
+    availablePoints: state.characterBuilder.availablePoints,
+    activeSpotlight: state.characterBuilder.activeSpotlight
   };
 }
 

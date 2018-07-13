@@ -1,0 +1,30 @@
+#toc {
+  background-color: #fafcfc;
+}
+
+#toc li {
+  color: #4c555a;
+  list-style-type: none;
+  padding: 10px 10px 0 10px;
+}
+
+#toc li.expanded {
+  color: #0099e5;
+}
+
+#toc a, #toc a:visited {
+  text-decoration: none;
+}
+
+a:not(.expanded) {
+  color: #4c555a;
+}
+
+a.expanded {
+  color: #0099e5;
+}
+
+ul {
+  height: 200px;
+  padding-left: 10px;
+}

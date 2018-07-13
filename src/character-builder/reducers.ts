@@ -2,6 +2,7 @@ import { CharacterBuildState, Race, CharacterAttribute, AttributeName, Skill, Sk
 import { ALL_RACES, CHARACTER_CLASSES } from './constants';
 import { AnyAction } from 'redux';
 
+// 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 
 const initialState: CharacterBuildState = {
   attributes: [
@@ -12,15 +13,29 @@ const initialState: CharacterBuildState = {
     { short: 'con', full: 'constitution', value: 8, modifier: -1 },
     { short: 'dex', full: 'dexterity', value: 8, modifier: -1 },
   ],
+  activeSpotlight: null,
   race: null,
   availablePoints: 27,
   skills: [
-    { name: 'Investigation', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-    { name: 'History', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-    { name: 'Perception', relatedAttribute: 'wisdom', value: 0, isProficient: false },
-    { name: 'Intimidation', relatedAttribute: 'strength', value: 0, isProficient: false },
+    { name: 'Acrobatics', relatedAttribute: 'dexterity', value: 0, isProficient: false },
+    { name: 'Animal Handling', relatedAttribute: 'wisdom', value: 0, isProficient: false },
     { name: 'Arcana', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-    { name: 'Acrobatics', relatedAttribute: 'dexterity', value: 0, isProficient: false }
+    { name: 'Athletics', relatedAttribute: 'strength', value: 0, isProficient: false },
+    { name: 'Deception', relatedAttribute: 'charisma', value: 0, isProficient: false },
+    { name: 'History', relatedAttribute: 'intelligence', value: 0, isProficient: false },
+    { name: 'Insight', relatedAttribute: 'wisdom', value: 0, isProficient: false },
+    { name: 'Intimidation', relatedAttribute: 'strength', value: 0, isProficient: false },
+    { name: 'Investigation', relatedAttribute: 'intelligence', value: 0, isProficient: false },
+    { name: 'Medicine', relatedAttribute: 'wisdom', value: 0, isProficient: false },
+    { name: 'Nature', relatedAttribute: 'wisdom', value: 0, isProficient: false },
+    { name: 'Perception', relatedAttribute: 'wisdom', value: 0, isProficient: false },
+    { name: 'Performance', relatedAttribute: 'charisma', value: 0, isProficient: false },
+    { name: 'Persuasion', relatedAttribute: 'charisma', value: 0, isProficient: false },
+    { name: 'Religion', relatedAttribute: 'intelligence', value: 0, isProficient: false },
+    { name: 'Sleight of Hand', relatedAttribute: 'dexterity', value: 0, isProficient: false },
+    { name: 'Stealth', relatedAttribute: 'dexterity', value: 0, isProficient: false },
+    { name: 'Survival', relatedAttribute: 'wisdom', value: 0, isProficient: false }
+
   ],
   activeAttribute: null,
   currentClass: null,
@@ -84,28 +99,6 @@ function attributeValue(n: number): number {
   return modifier * 2;
 }
 
-function increaseAttribute(state: CharacterBuildState, attribute: AttributeName): CharacterBuildState {
-  const idx = state.attributes.findIndex((a: CharacterAttribute) => a.full === attribute);
-  const attributes = state.attributes.slice();
-  const availablePoints = state.availablePoints;
-
-  if (idx === -1) {
-    return state;
-  }
-
-  const attr = attributes[idx];
-  const cost = attributeValue(attr.value + 1);
-
-  if (cost > availablePoints) {
-    return state;
-  }
-
-  attributes[idx] = Object.assign({}, attr, { value: attr.value + 1, modifier: getModifier(attr.value + 1) });
-
-  const skills = updateSkills(state.skills, attribute, attributes[idx].modifier);
-  return Object.assign({}, state, { attributes, availablePoints: availablePoints - cost, skills });
-}
-
 function updateSkills(skills: Skill[], attribute: AttributeName, value: number): Skill[] {
   const copy = skills.slice()
   for (const skill of copy) {
@@ -116,20 +109,45 @@ function updateSkills(skills: Skill[], attribute: AttributeName, value: number):
   return copy;
 }
 
-function decreaseAttribute(state: CharacterBuildState, attribute: AttributeName): CharacterBuildState {
-  const idx = state.attributes.findIndex((a: CharacterAttribute) => a.full === attribute);
-  const attributes = state.attributes.slice();
-  const availablePoints = state.availablePoints;
-  
-  if (idx === -1) {
+
+function increaseAttribute(state: CharacterBuildState, attribute: string | null): CharacterBuildState {
+
+  console.log(attribute);
+  if (!attribute) {
     return state;
   }
 
+
+  const idx = state.attributes.findIndex((a: CharacterAttribute) => a.full === attribute);
+  const attributes = state.attributes.slice();
+  const availablePoints = state.availablePoints;
+
+  const attr = attributes[idx];
+  const cost = attributeValue(attr.value + 1);
+
+  if (cost > availablePoints) {
+    return state;
+  }
+
+  attributes[idx] = Object.assign({}, attr, { value: attr.value + 1, modifier: getModifier(attr.value + 1) });
+
+  const skills = updateSkills(state.skills, attribute as AttributeName, attributes[idx].modifier);
+  return Object.assign({}, state, { attributes, availablePoints: availablePoints - cost, skills });
+}
+
+function decreaseAttribute(state: CharacterBuildState, attribute: string | null): CharacterBuildState {
+  if (!attribute) {
+    return state;
+  }
+
+  const idx = state.attributes.findIndex((a: CharacterAttribute) => a.full === attribute);
+  const attributes = state.attributes.slice();
+  const availablePoints = state.availablePoints;  
   const attr = attributes[idx];
   const refund = attributeValue(attr.value - 1);
 
   attributes[idx] = Object.assign({}, attr, { value: attr.value - 1, modifier: getModifier(attr.value - 1) });
-  const skills = updateSkills(state.skills, attribute, attributes[idx].modifier);
+  const skills = updateSkills(state.skills, attribute as AttributeName, attributes[idx].modifier);
 
   return Object.assign({}, state, { attributes, availablePoints: availablePoints + refund, skills });  
 }
@@ -180,21 +198,26 @@ function selectSubClass(state: CharacterBuildState, subClass: SubClass): Charact
   return Object.assign({}, state, { currentSubClass: null });
 }
 
+function changeSpotlight(state: CharacterBuildState, className: string): CharacterBuildState {
+  return Object.assign({}, state, { activeSpotlight: className });
+}
+
 export function characterBuilder(state: CharacterBuildState, action: AnyAction): CharacterBuildState {
   if (typeof state === 'undefined') {
     return initialState;
   }
-  console.log(state);
+
   switch (action.type) {
     case 'RESET_POINTS': return resetPoints(state);
     case 'CHANGE_RACE': return changeRace(state, action.race);
-    case 'ATTR_INC': return increaseAttribute(state, action.attribute);
-    case 'ATTR_DEC': return decreaseAttribute(state, action.attribute);
+    case 'ATTR_INC': return increaseAttribute(state, action.path);
+    case 'ATTR_DEC': return decreaseAttribute(state, action.path);
     case 'TRAIN_SKILL': return trainSkill(state, action.skill);
     case 'UNTRAIN_SKILL': return trainSkill(state, action.skill);
     case 'ACTIVATE_ATTR': return activateAttribute(state, action.attribute);
     case 'SELECT_CLASS': return updateClass(state, action.charClass);
     case 'SELECT_SUBCLASS': return selectSubClass(state, action.subClass);
+    case 'CHANGE_SPOTLIGHT': return changeSpotlight(state, action.className);
     default:
       return state;
   }

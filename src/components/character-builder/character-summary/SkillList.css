@@ -1,0 +1,10 @@
+#skill-list {
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-columns: repeat(2, 0.1fr 0.1fr 1fr);
+  color: wheat;
+}
+
+.skill-name a:visited {
+  color: wheat;
+}

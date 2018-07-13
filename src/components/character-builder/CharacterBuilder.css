@@ -1,8 +1,9 @@
+
 .char-builder-container {
   display: grid;
-  grid-template-columns: 80px 1fr 1fr 1fr;
-  grid-template-areas:
-    "attr-col skills-col races-col equip-col"
+  grid-template-columns: 0.3fr 1fr 1fr;
+  grid-template-areas: 
+    "attr-col" "equip-col";
 }
 
 #skill-list {
@@ -15,4 +16,28 @@
 
 #races {
   grid-area: races-col;
+}
+
+#sidebar li {
+  list-style-type: none;
+}
+
+#sidebar li > a {
+  text-decoration: none;
+  color: #4c555a
+}
+
+#sidebar li.expanded > a {
+  text-decoration: none;
+  color: #0099e5;
+}
+
+
+li > a {
+  text-decoration: none;
+}
+
+#sidebar {
+  background-color: #fafcfc;
+  /* background-color: #2d3134; */
 }
