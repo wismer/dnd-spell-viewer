@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { AttributeName, SkillName, PrimaryClassChoice } from "../typings";
+import { AbilityName, SkillName, PrimaryClassChoice } from "../typings";
 
 
 export function changeRace(race: string): AnyAction {
@@ -13,12 +13,12 @@ export function deselectRace(): AnyAction {
   return { type: 'CHANGE_RACE', race: null };
 }
 
-export function increaseAttribute(path: string | null): AnyAction {
-  return { type: 'ATTR_INC', path };
+export function increaseAbility(path: string | null): AnyAction {
+  return { type: 'ABILITY_INC', path };
 }
 
-export function decreaseAttribute(path: string | null): AnyAction {
-  return { type: 'ATTR_DEC', path };
+export function decreaseAbility(path: string | null): AnyAction {
+  return { type: 'ABILITY_DEC', path };
 }
 
 export function trainSkill(skill: SkillName): AnyAction {
@@ -29,10 +29,10 @@ export function changeSpotlight(className: string): AnyAction {
   return { type: 'CHANGE_SPOTLIGHT', className };
 }
 
-export function activateAttribute(attribute: AttributeName): AnyAction {
+export function activateAbility(ability: AbilityName): AnyAction {
   return {
     type: 'ACTIVATE_ATTR',
-    attribute
+    ability
   };
 }
 

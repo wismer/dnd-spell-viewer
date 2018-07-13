@@ -4,22 +4,22 @@ import { Race, Armor, PrimaryClass, Skill, SubClass } from '../typings';
 export const ALL_RACES: Race[] = [
   {
     name: 'Hill Dwarf',
-    attributes: [0, 1, 0, 0, 2, 0],
+    abilityScores: [0, 1, 0, 0, 2, 0],
     subraceOf: 'Dwarf'
   },
   {
     name: 'Mountain Dwarf',
-    attributes: [2, 1, 0, 0, 0, 0],
+    abilityScores: [2, 1, 0, 0, 0, 0],
     subraceOf: 'Dwarf'
   },
   {
     name: 'Wood Elf',
-    attributes: [0, 1, 0, 0, 0, 2],
+    abilityScores: [0, 1, 0, 0, 0, 2],
     subraceOf: 'Elf'
   },
   {
     name: 'High Elf',
-    attributes: [0, 0, 1, 0, 0, 2],
+    abilityScores: [0, 0, 1, 0, 0, 2],
     subraceOf: 'Elf'
   }
 ];
@@ -34,12 +34,12 @@ export const SAMPLE_ARMOR: Armor[] = [
 ];
 
 export const SKILLS: Skill[] = [
-  { name: 'Investigation', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-  { name: 'History', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-  { name: 'Perception', relatedAttribute: 'wisdom', value: 0, isProficient: false },
-  { name: 'Intimidation', relatedAttribute: 'strength', value: 0, isProficient: false },
-  { name: 'Arcana', relatedAttribute: 'intelligence', value: 0, isProficient: false },
-  { name: 'Acrobatics', relatedAttribute: 'dexterity', value: 0, isProficient: false }
+  { name: 'Investigation', relatedAbility: 'intelligence', value: 0, isProficient: false },
+  { name: 'History', relatedAbility: 'intelligence', value: 0, isProficient: false },
+  { name: 'Perception', relatedAbility: 'wisdom', value: 0, isProficient: false },
+  { name: 'Intimidation', relatedAbility: 'strength', value: 0, isProficient: false },
+  { name: 'Arcana', relatedAbility: 'intelligence', value: 0, isProficient: false },
+  { name: 'Acrobatics', relatedAbility: 'dexterity', value: 0, isProficient: false }
 ];
 
 export const CHARACTER_CLASSES: PrimaryClass[] = [
@@ -87,7 +87,7 @@ export const SUBCLASSES: SubClass[] = [
 export const ALL_SKILLS = [
   {
     name: 'Acrobatics',
-    relatedAttribute: 'dexterity',
+    relatedAbility: 'dexterity',
     description: 
     `
       Your Dexterity (Acrobatics) check covers your attempt to stay on your feet in a tricky situation, such as when you’re trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship’s deck. The DM might also call for a Dexterity (Acrobatics) check to see if you can perform acrobatic stunts, including dives, rolls, somersaults, and flips.
@@ -95,7 +95,7 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Animal Handling',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     `
       When there is any question whether you can calm down a domesticated animal,
@@ -106,7 +106,7 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Arcana',
-    relatedAttribute: 'intelligence',
+    relatedAbility: 'intelligence',
     description:
     `
       Your Intelligence (Arcana) check measures your ability to recall lore about spells, magic items, eldritch symbols, magical traditions, the planes of existence, and the inhabitants of those planes.
@@ -114,7 +114,7 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Athletics',
-    relatedAttribute: 'strength',
+    relatedAbility: 'strength',
     description:
     `
       Your Strength (Athletics) check covers difficult situations you encounter while climbing,
@@ -131,7 +131,7 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Deception',
-    relatedAttribute: 'charisma',
+    relatedAbility: 'charisma',
     description:
     `
       Your Charisma (Deception) check determines whether you can convincingly hide the truth, either verbally or through your actions. This deception can encompass everything from misleading others through ambiguity to telling outright lies. Typical situations include trying to fast-talk a guard, con a merchant, earn money through gambling, pass yourself off in a disguise, dull someone’s suspicions with false assurances, or maintain a straight face while telling
@@ -140,7 +140,7 @@ export const ALL_SKILLS = [
   },
   {
     name: 'History',
-    relatedAttribute: 'intelligence',
+    relatedAbility: 'intelligence',
     description:
     `
       Your Intelligence (History) check measures your ability to recall lore about historical events,
@@ -149,61 +149,61 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Insight',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     ``
   },
   {
     name: 'Intimidation',
-    relatedAttribute: 'strength',
+    relatedAbility: 'strength',
     description:
     ``
   },
   {
     name: 'Investigation',
-    relatedAttribute: 'intelligence',
+    relatedAbility: 'intelligence',
     description:
     ``
   },
   {
     name: 'Medicine',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     ``
   },
   {
     name: 'Nature',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     ``
   },
   {
     name: 'Perception',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     ``
   },
   {
     name: 'Performance',
-    relatedAttribute: 'charisma',
+    relatedAbility: 'charisma',
     description:
     ``
   },
   {
     name: 'Persuasion',
-    relatedAttribute: 'charisma',
+    relatedAbility: 'charisma',
     description:
     ``
   },
   {
     name: 'Religion',
-    relatedAttribute: 'intelligence',
+    relatedAbility: 'intelligence',
     description:
     ``
   },
   {
     name: 'Sleight of Hand',
-    relatedAttribute: 'dexterity',
+    relatedAbility: 'dexterity',
     description:
     `
       Whenever you attempt an act of legerdemain or manual trickery,
@@ -214,13 +214,13 @@ export const ALL_SKILLS = [
   },
   {
     name: 'Stealth',
-    relatedAttribute: 'dexterity',
+    relatedAbility: 'dexterity',
     description:
     ``
   },
   {
     name: 'Survival',
-    relatedAttribute: 'wisdom',
+    relatedAbility: 'wisdom',
     description:
     ``
   }

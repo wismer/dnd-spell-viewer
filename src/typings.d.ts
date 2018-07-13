@@ -71,16 +71,7 @@ export interface Character {
   player: string;
 }
 
-export interface CharacterAttributes {
-  strength: number;
-  wisdom: number;
-  intelligence: number;
-  charisma: number;
-  constitution: number;
-  dexterity: number;  
-}
-
-export interface CharacterAttribute {
+export interface CharacterAbilityScore {
   short: string;
   full: string;
   value: number;
@@ -101,7 +92,7 @@ export interface Armor {
 
 export interface PrimaryClass extends BaseClass {
   skillAllowance: number;
-  savingThrows: AttributeName[];
+  savingThrows: AbilityName[];
   subClassIDs: number[];
 }
 
@@ -113,11 +104,11 @@ export interface SubClass extends BaseClass {
 export interface CharacterBuildState {
   // primaryClass: PrimaryClass;
   // secondaryClass: SecondaryClass;
-  attributes: CharacterAttribute[];
+  abilityScores: CharacterAbilityScore[];
   race: Race | null;
   skills: Skill[];
   availablePoints: number;
-  activeAttribute: AttributeName | null;
+  activeAbility: AbilityName | null;
   currentClass: PrimaryClass | null;
   currentSubClass: SubClass | null;
   activeSpotlight: string | null;
@@ -127,20 +118,20 @@ type FaerunRaces = 'Elf' | 'Dwarf' | 'Tiefling' | 'Gnome' | 'Halfling';
 
 export interface Race {
   name: string;
-  attributes: number[];
+  abilityScores: number[];
   subraceOf: null | FaerunRaces;
 }
 
 export interface Skill {
   name: SkillName;
-  relatedAttribute: AttributeName;
+  relatedAbility: AbilityName;
   isProficient: boolean;
   value: number;
 }
 
 export type PrimaryClassChoice = 'Fighter' | 'Paladin' | 'Wizard' | 'Sorcerer' | 'Ranger' | 'Bard' | 'Druid' | 'Thief' | 'Monk' | 'Cleric';
 // export type PrimaryClassChoices = Fighter | Paladin | Wizard | Sorcerer | Ranger | Bard | Druid | Thief | Monk;
-export type AttributeName = 'dexterity' | 'strength' | 'intelligence' | 'charisma' | 'wisdom' | 'constitution';
+export type AbilityName = 'dexterity' | 'strength' | 'intelligence' | 'charisma' | 'wisdom' | 'constitution';
 export type SkillName = 'Investigation' | 'History' | 'Perception' | 'Intimidation' | 'Arcana' | 'Acrobatics' | 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 export type ArmorClass = 'light' | 'medium' | 'heavy';
 

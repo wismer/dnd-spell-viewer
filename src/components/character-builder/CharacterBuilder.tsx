@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { AttributeName, SkillName, CharacterAttribute, Race, Skill, AppState } from '../../typings';
+import { AbilityName, SkillName, CharacterAbilityScore, Race, Skill, AppState } from '../../typings';
 import { Dispatch } from 'redux';
-import { changeRace, increaseAttribute, decreaseAttribute, trainSkill, changeSpotlight } from '../../character-builder/actions';
+import { changeRace, increaseAbility, decreaseAbility, trainSkill, changeSpotlight } from '../../character-builder/actions';
 import { ALL_RACES } from '../../character-builder/constants';
 import './CharacterBuilder.css';
 
+
 interface CharacterBuilderContainerDispatch {
-  changeAttribute(attribute: AttributeName, increase: boolean): void;
+  changeAbilityScore(abilityScore: AbilityName, increase: boolean): void;
   changeRace(race: string): void;
   trainSkill(skill: SkillName): void;
   changeSpotlight(className: string): void;
@@ -19,7 +20,7 @@ interface CharacterBuilderContainerProps {
   activeSpotlight: string | null;
   race: Race | null;
   availablePoints: number;
-  attributes: CharacterAttribute[];
+  abilityScores: CharacterAbilityScore[];
 }
 
 type CharacterBuilderProps = CharacterBuilderContainerDispatch & CharacterBuilderContainerProps;
@@ -38,11 +39,11 @@ class CharacterBuilderContainer extends React.Component<CharacterBuilderProps, {
 
 const DispatchProps = (dispatch: Dispatch<AppState>): CharacterBuilderContainerDispatch => {
   return {
-    changeAttribute(attribute: AttributeName, increase: boolean) {
+    changeAbilityScore(abilityScore: AbilityName, increase: boolean) {
       if (increase) {
-        dispatch(increaseAttribute('a'));
+        dispatch(increaseAbility('a'));
       } else {
-        dispatch(decreaseAttribute('a'));
+        dispatch(decreaseAbility('a'));
       }
     },
 
@@ -65,7 +66,7 @@ const containerProps = (state: AppState): CharacterBuilderContainerProps => {
     races: ALL_RACES,
     race: state.characterBuilder.race,
     skills: state.characterBuilder.skills,
-    attributes: state.characterBuilder.attributes,
+    abilityScores: state.characterBuilder.abilityScores,
     availablePoints: state.characterBuilder.availablePoints,
     activeSpotlight: state.characterBuilder.activeSpotlight
   };
