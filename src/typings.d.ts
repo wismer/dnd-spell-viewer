@@ -116,10 +116,13 @@ export interface CharacterBuildState {
 
 type FaerunRaces = 'Elf' | 'Dwarf' | 'Tiefling' | 'Gnome' | 'Halfling';
 
-export interface Race {
+export interface Race<T = number> {
   name: string;
-  abilityScores: number[];
+  abilityScores: T[];
   subraceOf: null | FaerunRaces;
+  isPlayable: boolean;
+  summary: string;
+  bonusSkills: SkillName[];
 }
 
 export interface Skill {
@@ -127,6 +130,7 @@ export interface Skill {
   relatedAbility: AbilityName;
   isProficient: boolean;
   value: number;
+  description?: string;
 }
 
 export type PrimaryClassChoice = 'Fighter' | 'Paladin' | 'Wizard' | 'Sorcerer' | 'Ranger' | 'Bard' | 'Druid' | 'Thief' | 'Monk' | 'Cleric';
@@ -167,4 +171,10 @@ export interface RouteType {
   component: React.ComponentClass;
   exact?: boolean;
   routes?: RouteType[];
+}
+
+export interface RaceRoute {
+  path: string;
+  component: React.ComponentClass;
+  
 }
