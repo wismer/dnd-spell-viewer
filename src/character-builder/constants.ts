@@ -1,26 +1,79 @@
-import { Race, Armor, PrimaryClass, Skill, SubClass } from '../typings';
+import { Race, Armor, PrimaryClass, SubClass, SkillName } from '../typings';
 
 
 export const ALL_RACES: Race[] = [
   {
+    name: 'Dwarf',
+    abilityScores: [] as number[],
+    subraceOf: null,
+    summary: `
+      Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal.
+      Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller.
+      Their courage and endurance are also easily a match for any of the larger folk. Dwarven skin ranges from deep brown to a paler
+      hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth.
+      Their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair.
+      Male dwarves value their beards highly and groom them carefully.`,
+    bonusSkills: [] as SkillName[],
+    isPlayable: false
+  },
+
+  {
     name: 'Hill Dwarf',
     abilityScores: [0, 1, 0, 0, 2, 0],
-    subraceOf: 'Dwarf'
+    subraceOf: 'Dwarf',
+    summary: '',
+    bonusSkills: [] as SkillName[],
+    isPlayable: true
   },
   {
     name: 'Mountain Dwarf',
     abilityScores: [2, 1, 0, 0, 0, 0],
-    subraceOf: 'Dwarf'
+    subraceOf: 'Dwarf',
+    summary: '',
+    bonusSkills: [] as SkillName[],
+    isPlayable: true,
+  },
+
+  {
+    name: 'Elf',
+    abilityScores: [] as number[],
+    subraceOf: null,
+    summary: `
+      Elves are a magical people of otherworldly grace, living in the world but not entirely part of it.
+      They live in places of ethereal beauty, in the midst of ancient forests or in silvery spires glittering with faerie light,
+      where soft music drifts through the air and gentle fragrances waft on the breeze.
+      Elves love nature and magic, art and artistry, music and poetry, and the good things
+      of the world.
+      `,
+    bonusSkills: [] as SkillName[],
+    isPlayable: false
   },
   {
     name: 'Wood Elf',
     abilityScores: [0, 1, 0, 0, 0, 2],
-    subraceOf: 'Elf'
+    subraceOf: 'Elf',
+    summary: `
+      As a wood elf, you have keen senses and intuition, and your fleet feet carry you quickly and stealthily
+      through your native forests. This category includes the wild elves (grugach) of Greyhawk and the Kagonesti of Dragonlance,
+      as well as the races called wood elves in Greyhawk and the Forgotten Realms. In Faerun, wood elves (also called wild elves,
+      green elves, or forest elves) are reclusive and distrusting of non-elves.
+      `,
+    isPlayable: true,
+    bonusSkills: ['Perception']
   },
   {
     name: 'High Elf',
     abilityScores: [0, 0, 1, 0, 0, 2],
-    subraceOf: 'Elf'
+    subraceOf: 'Elf',
+    summary: `
+      As a high elf, you have a keen mind and a mastery of at least the basics of magic. In many of the worlds
+      of D&D, there are two kinds of high elves. One type (which includes the gray elves and valley elves of Greyhawk,
+      the Silvanesti of Dragonlance, and the sun elves of the Forgotten Realms) is haughty and reclusive, believing
+      themselves to be superior to non-elves and even other elves. The other type (including the high elves of Greyhawk,
+      the Qualinesti of Dragonlance, and the moon elves of the Forgotten Realms) are more common
+      and more friendly, and often encountered among humans and other races.`,
+    isPlayable: true,
+    bonusSkills: ['Perception']
   }
 ];
 
@@ -31,15 +84,6 @@ export const SAMPLE_ARMOR: Armor[] = [
   { name: 'Scale Mail', value: 16, category: 'heavy' },
   { name: 'Leather', value: 11, category: 'light' },
   { name: 'Padded Leather', value: 12, category: 'light' }
-];
-
-export const SKILLS: Skill[] = [
-  { name: 'Investigation', relatedAbility: 'intelligence', value: 0, isProficient: false },
-  { name: 'History', relatedAbility: 'intelligence', value: 0, isProficient: false },
-  { name: 'Perception', relatedAbility: 'wisdom', value: 0, isProficient: false },
-  { name: 'Intimidation', relatedAbility: 'strength', value: 0, isProficient: false },
-  { name: 'Arcana', relatedAbility: 'intelligence', value: 0, isProficient: false },
-  { name: 'Acrobatics', relatedAbility: 'dexterity', value: 0, isProficient: false }
 ];
 
 export const CHARACTER_CLASSES: PrimaryClass[] = [
@@ -180,8 +224,10 @@ export const ALL_SKILLS = [
   {
     name: 'Perception',
     relatedAbility: 'wisdom',
-    description:
-    ``
+    description: `Make a Perception check to notice clues, detect secret doors, spot imminent dangers,
+      find traps, follow tracks, listen for sounds behind a closed door, or locate hidden objects.
+      This skill is used against another creature’s Stealth check or against a DC set by the DM.
+      In most situations, the DM uses your passive Perception check result to determine if you notice a clue or an imminent danger.`,
   },
   {
     name: 'Performance',

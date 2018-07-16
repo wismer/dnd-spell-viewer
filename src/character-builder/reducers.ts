@@ -17,24 +17,114 @@ const initialState: CharacterBuildState = {
   race: null,
   availablePoints: 27,
   skills: [
-    { name: 'Acrobatics', relatedAbility: 'dexterity', value: 0, isProficient: false },
-    { name: 'Animal Handling', relatedAbility: 'wisdom', value: 0, isProficient: false },
-    { name: 'Arcana', relatedAbility: 'intelligence', value: 0, isProficient: false },
-    { name: 'Athletics', relatedAbility: 'strength', value: 0, isProficient: false },
-    { name: 'Deception', relatedAbility: 'charisma', value: 0, isProficient: false },
-    { name: 'History', relatedAbility: 'intelligence', value: 0, isProficient: false },
-    { name: 'Insight', relatedAbility: 'wisdom', value: 0, isProficient: false },
-    { name: 'Intimidation', relatedAbility: 'strength', value: 0, isProficient: false },
-    { name: 'Investigation', relatedAbility: 'intelligence', value: 0, isProficient: false },
-    { name: 'Medicine', relatedAbility: 'wisdom', value: 0, isProficient: false },
-    { name: 'Nature', relatedAbility: 'wisdom', value: 0, isProficient: false },
-    { name: 'Perception', relatedAbility: 'wisdom', value: 0, isProficient: false },
-    { name: 'Performance', relatedAbility: 'charisma', value: 0, isProficient: false },
-    { name: 'Persuasion', relatedAbility: 'charisma', value: 0, isProficient: false },
-    { name: 'Religion', relatedAbility: 'intelligence', value: 0, isProficient: false },
-    { name: 'Sleight of Hand', relatedAbility: 'dexterity', value: 0, isProficient: false },
-    { name: 'Stealth', relatedAbility: 'dexterity', value: 0, isProficient: false },
-    { name: 'Survival', relatedAbility: 'wisdom', value: 0, isProficient: false }
+    {
+      name: 'Acrobatics',
+      relatedAbility: 'dexterity',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Animal Handling',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Arcana',
+      relatedAbility: 'intelligence',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Athletics',
+      relatedAbility: 'strength',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Deception',
+      relatedAbility: 'charisma',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'History',
+      relatedAbility: 'intelligence',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Insight',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Intimidation',
+      relatedAbility: 'strength',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Investigation',
+      relatedAbility: 'intelligence',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Medicine',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Nature',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Perception',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Performance',
+      relatedAbility: 'charisma',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Persuasion',
+      relatedAbility: 'charisma',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Religion',
+      relatedAbility: 'intelligence',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Sleight of Hand',
+      relatedAbility: 'dexterity',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Stealth',
+      relatedAbility: 'dexterity',
+      value: -1,
+      isProficient: false
+    },
+    {
+      name: 'Survival',
+      relatedAbility: 'wisdom',
+      value: -1,
+      isProficient: false
+     }
 
   ],
   activeAbility: null,
@@ -42,11 +132,11 @@ const initialState: CharacterBuildState = {
   currentSubClass: null
 };
 
-function updateAbilityScores(abilityScores: CharacterAbilityScore[], values: number[]): CharacterAbilityScore[] {
-  return abilityScores
-    .map((attr: CharacterAbilityScore, idx: number) => Object.assign({}, attr, { value: 8 + values[idx] }))
-    .map((attr: CharacterAbilityScore, idx: number) => Object.assign({}, attr, { modifier: getModifier(attr.value) }));
-}
+// function updateAbilityScores(abilityScores: CharacterAbilityScore[], values: number[]): CharacterAbilityScore[] {
+//   return abilityScores
+//     .map((attr: CharacterAbilityScore, idx: number) => Object.assign({}, attr, { value: 8 + values[idx] }))
+//     .map((attr: CharacterAbilityScore, idx: number) => Object.assign({}, attr, { modifier: getModifier(attr.value) }));
+// }
 
 function updateClass(state: CharacterBuildState, charClass: PrimaryClassChoice): CharacterBuildState {
   // let { skills } = state;
@@ -64,39 +154,39 @@ function updateClass(state: CharacterBuildState, charClass: PrimaryClassChoice):
 }
 
 function changeRace(state: CharacterBuildState, targetRace: string): CharacterBuildState {
+  console.log(targetRace);
   const race = ALL_RACES.find((r: Race) => r.name === targetRace);
   const currentRace = state.race;
 
   if (!race) {
     return state;
   }
-  let abilityScores: CharacterAbilityScore[] = state.abilityScores;
+
   let newRace;
   if (currentRace && currentRace.name === targetRace) {
     newRace = null;
-    abilityScores = updateAbilityScores(abilityScores, [0, 0, 0, 0, 0, 0]);
   } else {
     newRace = race;
-    abilityScores = updateAbilityScores(abilityScores, race.abilityScores);
   }
 
-  const skills = state.skills
-    .map((skill: Skill) => Object.assign({}, skill, { value: 0 }));
+  // const skills = state.skills
+  //   .map((skill: Skill) => Object.assign({}, skill, { value: 0 }));
 
-  return Object.assign({}, state, { abilityScores, availablePoints: 27, skills, race: newRace });
+  return Object.assign({}, state, { race: newRace });
 }
 
 function getModifier(n: number): number {
-  return Math.floor(n / 2) - 5;
+  return Math.floor((n - 10) / 2);
 }
 
-function abilityScoreValue(n: number): number {
-  const modifier = getModifier(n);
-  if (modifier <= 0) {
-    return 1;
+function abilityScoreCost(n: number): number {
+  if (n <= 13) {
+    return n - 8;
+  } else if (n === 14) {
+    return 7;
+  } else {
+    return 9;
   }
-
-  return modifier * 2;
 }
 
 function updateSkills(skills: Skill[], abilityScore: AbilityName, value: number): Skill[] {
@@ -109,44 +199,42 @@ function updateSkills(skills: Skill[], abilityScore: AbilityName, value: number)
   return copy;
 }
 
-
-function increaseAbilityScore(state: CharacterBuildState, abilityScore: string | null): CharacterBuildState {
+function changeAbilityScore(state: CharacterBuildState, abilityScore: string | null, step: number): CharacterBuildState {
   if (!abilityScore) {
     return state;
   }
 
   const idx = state.abilityScores.findIndex((a: CharacterAbilityScore) => a.full === abilityScore);
   const abilityScores = state.abilityScores.slice();
-  const availablePoints = state.availablePoints;
-
+  let availablePoints = state.availablePoints;
+  
   const attr = abilityScores[idx];
-  const cost = abilityScoreValue(attr.value + 1);
+  const value = attr.value;
+  const prevCost = abilityScoreCost(value);
+  const cost = abilityScoreCost(value + step);
 
-  if (cost > availablePoints) {
+  if (step === 1) {
+    availablePoints -= cost - prevCost;
+  } else {
+    availablePoints += Math.abs(prevCost - cost);
+  }
+
+  if (value + step < 8 || value + step > 15 || availablePoints < 0) {
     return state;
   }
 
-  abilityScores[idx] = Object.assign({}, attr, { value: attr.value + 1, modifier: getModifier(attr.value + 1) });
-
-  const skills = updateSkills(state.skills, abilityScore as AbilityName, abilityScores[idx].modifier);
-  return Object.assign({}, state, { abilityScores, availablePoints: availablePoints - cost, skills });
-}
-
-function decreaseAbilityScore(state: CharacterBuildState, abilityScore: string | null): CharacterBuildState {
-  if (!abilityScore) {
-    return state;
+  let racialBonus = 0;
+  if (state.race) {
+    racialBonus += state.race.abilityScores[idx];
   }
 
-  const idx = state.abilityScores.findIndex((a: CharacterAbilityScore) => a.full === abilityScore);
-  const abilityScores = state.abilityScores.slice();
-  const availablePoints = state.availablePoints;  
-  const attr = abilityScores[idx];
-  const refund = abilityScoreValue(attr.value - 1);
+  abilityScores[idx] = Object.assign({}, attr, {
+    value: attr.value + step,
+    modifier: getModifier(attr.value + step + racialBonus)
+  });
 
-  abilityScores[idx] = Object.assign({}, attr, { value: attr.value - 1, modifier: getModifier(attr.value - 1) });
   const skills = updateSkills(state.skills, abilityScore as AbilityName, abilityScores[idx].modifier);
-
-  return Object.assign({}, state, { abilityScores, availablePoints: availablePoints + refund, skills });  
+  return Object.assign({}, state, { abilityScores, availablePoints, skills });
 }
 
 function resetPoints(state: CharacterBuildState): CharacterBuildState {
@@ -204,11 +292,13 @@ export function characterBuilder(state: CharacterBuildState, action: AnyAction):
     return initialState;
   }
 
+  console.log(action, state);
+
   switch (action.type) {
     case 'RESET_POINTS': return resetPoints(state);
     case 'CHANGE_RACE': return changeRace(state, action.race);
-    case 'ABILITY_INC': return increaseAbilityScore(state, action.path);
-    case 'ABILITY_DEC': return decreaseAbilityScore(state, action.path);
+    case 'ABILITY_INC': return changeAbilityScore(state, action.path, 1);
+    case 'ABILITY_DEC': return changeAbilityScore(state, action.path, -1);
     case 'TRAIN_SKILL': return trainSkill(state, action.skill);
     case 'UNTRAIN_SKILL': return trainSkill(state, action.skill);
     case 'ACTIVATE_ABILITY': return activateAbility(state, action.abilityScore);
