@@ -154,7 +154,6 @@ function updateClass(state: CharacterBuildState, charClass: PrimaryClassChoice):
 }
 
 function changeRace(state: CharacterBuildState, targetRace: string): CharacterBuildState {
-  console.log(targetRace);
   const race = ALL_RACES.find((r: Race) => r.name === targetRace);
   const currentRace = state.race;
 
@@ -162,17 +161,22 @@ function changeRace(state: CharacterBuildState, targetRace: string): CharacterBu
     return state;
   }
 
-  let newRace;
-  if (currentRace && currentRace.name === targetRace) {
-    newRace = null;
-  } else {
-    newRace = race;
+  let skills = state.skills;
+  let bonusSkills = race.bonusSkills;
+  let currentBonusSkills: SkillName[] = [];
+  if (currentRace && currentRace.name !== targetRace) {
+    currentBonusSkills = currentRace.bonusSkills;
   }
 
-  // const skills = state.skills
-  //   .map((skill: Skill) => Object.assign({}, skill, { value: 0 }));
+  bonusSkills = bonusSkills.concat(currentBonusSkills);
+  for (const name of bonusSkills) {
+    const idx = skills.findIndex((skill: Skill) => skill.name === name);
+    if (idx > -1) {
+      skills = Object.assign([], skills, { [idx]: updateSkill(skills[idx]) });
+    }
+  }
 
-  return Object.assign({}, state, { race: newRace });
+  return Object.assign({}, state, { race, skills });
 }
 
 function getModifier(n: number): number {
@@ -197,6 +201,17 @@ function updateSkills(skills: Skill[], abilityScore: AbilityName, value: number)
     }
   }
   return copy;
+}
+
+function updateSkill(skill: Skill): Skill {
+  let value = skill.value;
+  if (skill.isProficient) {
+    value -= 2;
+  } else {
+    value += 2;
+  }
+
+  return Object.assign({}, skill, { value, isProficient: !skill.isProficient });
 }
 
 function changeAbilityScore(state: CharacterBuildState, abilityScore: string | null, step: number): CharacterBuildState {
