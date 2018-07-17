@@ -7,12 +7,11 @@ import { ALL_RACES } from '../../character-builder/constants';
 import { changeRace } from '../../character-builder/actions';
 // import { RouteComponentProps } from 'react-router';
 
+
 class PlayableRaces extends React.Component<PlayableRacesProps & PlayableRacesDispatchers, {}> {
-
-
   public render() {
     if (this.props.options.length === 0) {
-      return <Redirect to='/races/elf' />;
+      return <Redirect to='/races/dwarf' />;
     }
 
     const options = this.props.options.map((r: Race<CharacterAbilityScore>, idx: number) => {

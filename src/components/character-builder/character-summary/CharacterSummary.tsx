@@ -69,7 +69,7 @@ const mapStateToProps = (state: AppState, props: RouteComponentProps<{ ability: 
   const activeAbility = abilities.find((attr: CharacterAbilityScore) => {
     return props.location.pathname.includes(attr.full.toLowerCase());
   });
-  console.log(abilities);
+
   return {
     abilities,
     race: state.characterBuilder.race,

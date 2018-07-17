@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 import {
   BrowserRouter,
   Route,
+  Redirect,
+  Switch,
 } from 'react-router-dom';
 
 // import App from './App';
@@ -59,45 +61,25 @@ const tableOfContentsRenderer = (props: any) => {
   return <TableOfContents categories={[]} changeSpotlight={fuckingTS} activeSpotlight={''} {...props} />
 }
 
+// const raceRender = (props: RouteComponentProps<{ race: string }>) => {
+//   if 
+// }
+
 const characterSummaryRenderer = (props: any) => {
   return <CharacterSummary {...props} />
 }
-
-// const abilityRenderer = (props: RouteComponentProps<{ ability: string }>) => {
-//   switch (props.match.params.ability) {
-//     case 'dexterity': return <AbilityHome.Dexterity />;
-//     case 'wisdom': return <AbilityHome.Wisdom />;
-//     case 'intelligence': return <AbilityHome.Intelligence />;
-//     case 'charisma': return <AbilityHome.Charisma />;
-//     case 'strength': return <AbilityHome.Strength />;
-//     case 'constitution': return <AbilityHome.Constitution />;
-//     default: 
-//       return <AbilityHome.Home />;
-//   }
-// }
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <div id='char-builder'>
         <Route path='/' render={tableOfContentsRenderer} />
-        <Route path='/races/:race' component={PlayableRaces} exact={false} />
+        <Switch>
+          <Route path='/races/:race' component={PlayableRaces} exact={false} />
+          <Redirect from='/races' to='/races/dwarf' exact={true} />
+        </Switch>
         <Route path='/abilities/:ability' component={AbilityHome.Home} exact={false} />
-        {/* <Switch>
-          <Route path='/abilities' component={AbilityHome.Home} exact={true} />
-
-          <Switch>
-            <Route path='/abilities/constitution' component={AbilityHome.Constitution} exact={true} />
-            <Route path='/abilities/strength' component={AbilityHome.Strength} exact={true} />
-            <Route path='/abilities/wisdom' component={AbilityHome.Wisdom} exact={true} />
-            <Route path='/abilities/dexterity' component={AbilityHome.Dexterity} exact={true} />
-            <Route path='/abilities/charisma' component={AbilityHome.Charisma} exact={true} />
-            <Route path='/abilities/intelligence' component={AbilityHome.Intelligence} exact={true} />
-          </Switch>
-        </Switch> */}
-
-        <Route path='/skills' component={SkillHome} exact={true} />
-
+        <Route path='/skills/:skill' component={SkillHome} exact={true} />
         <Route path='/' render={characterSummaryRenderer} />
       </div>
     </BrowserRouter>

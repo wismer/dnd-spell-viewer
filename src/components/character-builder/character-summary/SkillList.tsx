@@ -17,11 +17,11 @@ interface SkillListProps {
 class SkillList extends React.Component<SkillListDispatch & SkillListProps, {}> {
   public render() {
     const skills = this.props.skills.map((skill: Skill, idx: number) => {
-      // const onClick = this.props.trainSkill.bind(null, skill);
+      const value = skill.value > -1 ? `+${skill.value}` : skill.value;
       return (
         <>
           <div key={`${skill.name}-${idx}`}>{skill.isProficient ? "■" : "□"}</div>
-          <div key={idx}>{skill.value}</div>
+          <div key={idx}>{value}</div>
           <div className='skill-name' key={skill.name}>
             <Link to={`/skills#${skill.name.toLowerCase().replace(/\s+/g, '-')}`}>{skill.name}</Link>
           </div>
