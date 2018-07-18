@@ -77,6 +77,19 @@ class TableOfContents extends React.Component<TOCProps & RouteComponentProps<TOC
               {skillLinks}
             </ul>
           </li>
+
+          <li>
+            <NavLink activeClassName='expanded' to='/weapons'>Weapons</NavLink>
+
+            <ul style={listItemStyle(location.pathname, 'weapons')}>
+              <li>
+                <NavLink activeClassName='expanded' to='/weapons/simple'>Simple</NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName='expanded' to='/weapons/martial'>Martial</NavLink>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     );
