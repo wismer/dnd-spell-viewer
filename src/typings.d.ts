@@ -80,14 +80,7 @@ export interface CharacterAbilityScore {
 
 interface BaseClass {
   name: string;
-  bonusSkills: SkillName[];
-  armorClass: ArmorClass[];
-}
-
-export interface Armor {
-  name: string;
-  category: ArmorClass;
-  value: number;
+  bonusSkills?: SkillName[];
 }
 
 export interface PrimaryClass extends BaseClass {
@@ -98,13 +91,16 @@ export interface PrimaryClass extends BaseClass {
 
 export interface SubClass extends BaseClass {
   parentClass: PrimaryClassChoice;
+  bonusProficiencies: string[];
   id: number;
 }
+
 
 export interface CharacterBuildState {
   // primaryClass: PrimaryClass;
   // secondaryClass: SecondaryClass;
   abilityScores: CharacterAbilityScore[];
+  proficiencies: string[];
   race: Race | null;
   skills: Skill[];
   availablePoints: number;
@@ -145,6 +141,16 @@ export interface Weapon {
   cost?: number;
 }
 
+export interface Armor {
+  name: string;
+  armorClass: number;
+  strengthReq: number;
+  armorType: 'light' | 'medium' | 'heavy';
+  hasDexterityBonus: boolean;
+  stealthDisadvantage: boolean;
+  maxBonus?: number;
+}
+
 export interface ItemProperty {
   name: string;
   description: string;
@@ -159,7 +165,6 @@ export interface Dice {
 }
 
 export type PrimaryClassChoice = 'Fighter' | 'Paladin' | 'Wizard' | 'Sorcerer' | 'Ranger' | 'Bard' | 'Druid' | 'Thief' | 'Monk' | 'Cleric';
-// export type PrimaryClassChoices = Fighter | Paladin | Wizard | Sorcerer | Ranger | Bard | Druid | Thief | Monk;
 export type AbilityName = 'dexterity' | 'strength' | 'intelligence' | 'charisma' | 'wisdom' | 'constitution';
 export type SkillName = 'Investigation' | 'History' | 'Perception' | 'Intimidation' | 'Arcana' | 'Acrobatics' | 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 export type ArmorClass = 'light' | 'medium' | 'heavy';

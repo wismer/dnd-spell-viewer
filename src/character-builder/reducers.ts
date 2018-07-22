@@ -13,6 +13,7 @@ const initialState: CharacterBuildState = {
     { short: 'con', full: 'constitution', value: 8, modifier: -1 },
     { short: 'dex', full: 'dexterity', value: 8, modifier: -1 },
   ],
+  proficiencies: [],
   activeSpotlight: null,
   race: null,
   availablePoints: 27,
@@ -290,8 +291,13 @@ function activateAbility(state: CharacterBuildState, ability: AbilityName): Char
   }
 }
 
+// function updateProficiencies(proficiencies: string[]): CharacterBuildState => {
+
+// }
+
 function selectSubClass(state: CharacterBuildState, subClass: SubClass): CharacterBuildState {
   if (!state.currentSubClass || state.currentSubClass.id !== subClass.id) {
+
     return Object.assign({}, state, { currentSubClass: subClass })
   }
 

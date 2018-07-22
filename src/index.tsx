@@ -32,6 +32,7 @@ import Weapon from './components/character-builder/Weapon';
 import SkillHome from './components/character-builder/SkillHome';
 import { SIMPLE_WEAPONS, MARTIAL_WEAPONS } from './character-builder/constants';
 import { Weapon as WeaponType } from './typings';
+import ArmorWrapper from './components/character-builder/Armor';
 
 interface WindowRedux extends Window {
   __REDUX_DEVTOOLS_EXTENSION__: any
@@ -91,8 +92,9 @@ ReactDOM.render(
           <Redirect from='/weapons' to='/weapons/simple' exact={true} />
         </Switch>
 
+        <Route path='/armor' component={ArmorWrapper} />
         <Route path='/abilities/:ability' component={AbilityHome.Home} exact={false} />
-        <Route path='/skills/:skill' component={SkillHome} exact={true} />
+        <Route path='/skills' component={SkillHome} exact={true} />
         <Route path='/' render={characterSummaryRenderer} />
       </div>
     </BrowserRouter>

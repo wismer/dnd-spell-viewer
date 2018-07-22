@@ -181,10 +181,39 @@ export const ALL_RACES: Race[] = [
 export const RACE_TOC: string[] = ALL_RACES.map((race: Race) => race.name);
 
 export const SAMPLE_ARMOR: Armor[] = [
-  { name: 'Ringmail', value: 14, category: 'medium' },
-  { name: 'Scale Mail', value: 16, category: 'heavy' },
-  { name: 'Leather', value: 11, category: 'light' },
-  { name: 'Padded Leather', value: 12, category: 'light' }
+  {
+    name: 'Ringmail',
+    armorClass: 14,
+    armorType: 'heavy',
+    hasDexterityBonus: false,
+    stealthDisadvantage: true,
+    strengthReq: 0
+  },
+  {
+    name: 'Scale Mail',
+    armorClass: 14,
+    hasDexterityBonus: true,
+    maxBonus: 2,
+    stealthDisadvantage: true,
+    strengthReq: 0,
+    armorType: 'medium'
+  },
+  {
+    name: 'Leather',
+    armorClass: 11,
+    hasDexterityBonus: true,
+    stealthDisadvantage: false,
+    strengthReq: 0,
+    armorType: 'light'
+  },
+  {
+    name: 'Padded Leather',
+    stealthDisadvantage: true,
+    armorClass: 11,
+    armorType: 'light',
+    hasDexterityBonus: true,
+    strengthReq: 0
+  }
 ];
 
 export const CHARACTER_CLASSES: PrimaryClass[] = [
@@ -192,7 +221,6 @@ export const CHARACTER_CLASSES: PrimaryClass[] = [
     name: 'Cleric',
     bonusSkills: ['Perception', 'History', 'Insight', 'Medicine', 'Persuasion', 'Religion'],
     skillAllowance: 2,
-    armorClass: ['light', 'medium'],
     savingThrows: ['wisdom', 'charisma'],
     subClassIDs: [1, 2, 3, 4]
   }
@@ -203,28 +231,28 @@ export const SUBCLASSES: SubClass[] = [
     id: 1,
     parentClass: 'Cleric',
     name: 'Life',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium', 'heavy', 'simple'],
     bonusSkills: []
   },
   {
     id: 2,
     parentClass: 'Cleric',
     name: 'War',
-    armorClass: ['light', 'medium', 'heavy'],
+    bonusProficiencies: ['light', 'medium', 'heavy', 'simple', 'martial'],
     bonusSkills: []
   },
   {
     id: 3,
     parentClass: 'Cleric',
     name: 'Knowledge',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium'],
     bonusSkills: []
   },
   {
     id: 4,
     parentClass: 'Cleric',
     name: 'Nature',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium'],
     bonusSkills: []
   }
 ];
