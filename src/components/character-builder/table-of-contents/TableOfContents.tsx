@@ -77,6 +77,61 @@ class TableOfContents extends React.Component<TOCProps & RouteComponentProps<TOC
               {skillLinks}
             </ul>
           </li>
+
+          <li>
+            <NavLink activeClassName='expanded' to='/armor'>Armor</NavLink>
+          </li>
+
+          <li>
+            <NavLink activeClassName='expanded' to='/weapons'>Weapons</NavLink>
+
+            <ul style={listItemStyle(location.pathname, 'weapons')}>
+              <li>
+                <NavLink activeClassName='expanded' to='/weapons/simple'>Simple</NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName='expanded' to='/weapons/martial'>Martial</NavLink>
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <NavLink activeClassName='expanded' to='/classes'>Classes</NavLink>
+
+            <ul style={listItemStyle(location.pathname, 'classes')}>
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/barbarian'>Barbarian</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/fighter'>Fighter</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/cleric'>Cleric</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/sorcerer'>Sorcerer</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/wizard'>Wizard</NavLink>
+
+              <li>
+              </li>
+                <NavLink activeClassName='expanded' to='/classes/thief'>Thief</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/bard'>Bard</NavLink>
+              </li>
+
+              <li>
+                <NavLink activeClassName='expanded' to='/classes/paladin'>Paladin</NavLink>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     );

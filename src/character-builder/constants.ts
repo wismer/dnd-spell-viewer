@@ -1,5 +1,106 @@
-import { Race, Armor, PrimaryClass, SubClass, SkillName } from '../typings';
+import {
+  Race,
+  Armor,
+  PrimaryClass,
+  SubClass,
+  SkillName,
+  Weapon,
+  WeaponProperty,
+} from '../typings';
 
+
+export const FINESSE: WeaponProperty = {
+  name: 'Finesse',
+  description: `
+    When Making an Attack with a finesse weapon, you use your choice of your Strength or Dexterity
+    modifier for the Attack and Damage Rolls. You must use the same modifier for both rolls.
+  `
+};
+
+export const VERSATILE: WeaponProperty = {
+  name: 'Versatile',
+  description: `
+    This weapon can be used with one or two hands. A damage value in parentheses appears with the
+    property—the damage when the weapon is used with two hands to make a melee Attack.
+  `
+};
+
+export const SILVERED: WeaponProperty = {
+  name: 'Silvered',
+  description: `
+    Some Monsters that have immunity or Resistance to nonmagical Weapons are susceptible to silver Weapons,
+    so cautious adventurers invest extra coin to plate their Weapons with silver. You can silver a single
+    weapon or ten pieces of Ammunition for 100 gp. This cost represents not only the price of the silver,
+    but the time and expertise needed to add silver to the weapon without making it less effective.
+  `
+};
+
+export const LIGHT: WeaponProperty = {
+  name: 'Light',
+  description: `
+    A light weapon is small and easy to handle, making it ideal for use when fighting with two Weapons.
+  `
+};
+
+export const HEAVY: WeaponProperty = {
+  name: 'Heavy',
+  description: `
+    Small creatures have disadvantage on Attack rolls with heavy Weapons. A heavy weapon’s size and bulk make it too large for a Small creature to use effectively.
+  `
+};
+
+export const AMMUNITION: WeaponProperty = {
+  name: 'Ammunition',
+  description: `
+    You can use a weapon that has the Ammunition property to make a ranged Attack only if you have Ammunition to fire
+    from the weapon. Each time you Attack with the weapon, you expend one piece of Ammunition. Drawing the Ammunition
+    from a Quiver, case, or other container is part of the Attack (you need a free hand to load a one-handed weapon).
+    At the end of the battle, you can recover half your expended Ammunition by taking a minute to Search the battlefield.
+    If you use a weapon that has the Ammunition property to make a melee Attack, you treat the weapon as an Improvised
+    Weapon (see “Improvised Weapons” later in the section). A sling must be loaded to deal any damage when used in this way.
+  `
+};
+
+export const LOADING: WeaponProperty = {
+  name: 'Loading',
+  description: `
+    Because of the time required to load this weapon, you can fire only one piece of Ammunition from it when you use an action,
+    Bonus Action, or reaction to fire it, regardless of the number of attacks you can normally make.
+  `
+};
+
+export const RANGE: WeaponProperty = {
+  name: 'Range',
+  description: `
+    A weapon that can be used to make a ranged Attack has a range in parentheses after the Ammunition or thrown property.
+    The range lists two numbers. The first is the weapon’s normal range in feet, and the second indicates the weapon’s long
+    range. When attacking a target beyond normal range, you have disadvantage on the Attack roll. You can’t Attack a target
+    beyond the weapon’s long range.
+  `
+};
+
+export const REACH: WeaponProperty = {
+  name: 'Reach',
+  description: `
+    This weapon adds 5 feet to your reach when you Attack with it, as well as when determining your reach for Opportunity Attacks with it.
+  `
+};
+
+export const TWO_HANDED: WeaponProperty = {
+  name: 'Two-Handed',
+  description: `This weapon requires two hands when you Attack with it.`
+};
+
+export const THROWN: WeaponProperty = {
+  name: 'Thrown',
+  description: `
+    If a weapon has the thrown property, you can throw the weapon to make a ranged Attack.
+    If the weapon is a melee weapon, you use the same ability modifier for that Attack roll
+    and damage roll that you would use for a melee Attack with the weapon. For example, if you
+    throw a Handaxe, you use your Strength, but if you throw a Dagger, you can use either your
+    Strength or your Dexterity, since the Dagger has the finesse property.
+  `
+};
 
 export const ALL_RACES: Race[] = [
   {
@@ -80,10 +181,39 @@ export const ALL_RACES: Race[] = [
 export const RACE_TOC: string[] = ALL_RACES.map((race: Race) => race.name);
 
 export const SAMPLE_ARMOR: Armor[] = [
-  { name: 'Ringmail', value: 14, category: 'medium' },
-  { name: 'Scale Mail', value: 16, category: 'heavy' },
-  { name: 'Leather', value: 11, category: 'light' },
-  { name: 'Padded Leather', value: 12, category: 'light' }
+  {
+    name: 'Ringmail',
+    armorClass: 14,
+    armorType: 'heavy',
+    hasDexterityBonus: false,
+    stealthDisadvantage: true,
+    strengthReq: 0
+  },
+  {
+    name: 'Scale Mail',
+    armorClass: 14,
+    hasDexterityBonus: true,
+    maxBonus: 2,
+    stealthDisadvantage: true,
+    strengthReq: 0,
+    armorType: 'medium'
+  },
+  {
+    name: 'Leather',
+    armorClass: 11,
+    hasDexterityBonus: true,
+    stealthDisadvantage: false,
+    strengthReq: 0,
+    armorType: 'light'
+  },
+  {
+    name: 'Padded Leather',
+    stealthDisadvantage: true,
+    armorClass: 11,
+    armorType: 'light',
+    hasDexterityBonus: true,
+    strengthReq: 0
+  }
 ];
 
 export const CHARACTER_CLASSES: PrimaryClass[] = [
@@ -91,7 +221,6 @@ export const CHARACTER_CLASSES: PrimaryClass[] = [
     name: 'Cleric',
     bonusSkills: ['Perception', 'History', 'Insight', 'Medicine', 'Persuasion', 'Religion'],
     skillAllowance: 2,
-    armorClass: ['light', 'medium'],
     savingThrows: ['wisdom', 'charisma'],
     subClassIDs: [1, 2, 3, 4]
   }
@@ -102,28 +231,28 @@ export const SUBCLASSES: SubClass[] = [
     id: 1,
     parentClass: 'Cleric',
     name: 'Life',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium', 'heavy', 'simple'],
     bonusSkills: []
   },
   {
     id: 2,
     parentClass: 'Cleric',
     name: 'War',
-    armorClass: ['light', 'medium', 'heavy'],
+    bonusProficiencies: ['light', 'medium', 'heavy', 'simple', 'martial'],
     bonusSkills: []
   },
   {
     id: 3,
     parentClass: 'Cleric',
     name: 'Knowledge',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium'],
     bonusSkills: []
   },
   {
     id: 4,
     parentClass: 'Cleric',
     name: 'Nature',
-    armorClass: ['light', 'medium'],
+    bonusProficiencies: ['light', 'medium'],
     bonusSkills: []
   }
 ];
@@ -271,3 +400,71 @@ export const ALL_SKILLS = [
     ``
   }
 ];
+
+export const SIMPLE_WEAPONS: Weapon[] = [
+  {
+    damageType: 'bludgeoning',
+    damage: { count: 1, die: 4 },
+    isMartialWeapon: false,
+    isRanged: false,
+    name: 'Club',
+    properties: [LIGHT],
+  },
+  {
+    damageType: 'piercing',
+    isRanged: true,
+    isMartialWeapon: false,
+    range: [20, 60],
+    damage: { count: 1, die: 4 },
+    name: 'Dagger',
+    properties: [LIGHT, FINESSE, THROWN],
+  }
+]
+
+export const MARTIAL_WEAPONS: Weapon[] = [
+  {
+    damageType: 'slashing',
+    damage: { count: 1, die: 8 },
+    versatileDamage: { count: 1, die: 10 },
+    isMartialWeapon: true,
+    isRanged: false,
+    name: 'Battleaxe',
+    properties: [VERSATILE],
+  },
+
+  {
+    damageType: 'bludgeoning',
+    damage: { count: 1, die: 8 },
+    isMartialWeapon: true,
+    isRanged: false,
+    name: 'Flail',
+    properties: [],
+  },
+
+  {
+    damageType: 'slashing',
+    damage: { count: 1, die: 10 },
+    isMartialWeapon: true,
+    isRanged: false,
+    name: 'Glaive',
+    properties: [REACH, TWO_HANDED, HEAVY]
+  },
+
+  {
+    damageType: 'slashing',
+    damage: { count: 1, die: 12 },
+    isMartialWeapon: true,
+    isRanged: false,
+    name: 'Great Axe',
+    properties: [HEAVY, TWO_HANDED],
+  },
+
+  {
+    damageType: 'slashing',
+    damage: { count: 2, die: 6 },
+    isMartialWeapon: true,
+    isRanged: false,
+    name: 'Greatsword',
+    properties: [HEAVY, TWO_HANDED]
+  }
+]

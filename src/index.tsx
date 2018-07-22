@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
   Switch,
+  RouteComponentProps,
 } from 'react-router-dom';
 
 // import App from './App';
@@ -27,10 +28,11 @@ import TableOfContents from './components/character-builder/table-of-contents/Ta
 import CharacterSummary from './components/character-builder/character-summary/CharacterSummary';
 import PlayableRaces from './components/character-builder/PlayableRaces';
 import AbilityHome from './components/character-builder/abilities/AbilityHome';
+import Weapon from './components/character-builder/Weapon';
 import SkillHome from './components/character-builder/SkillHome';
-// import { AppState } from './typings';
-// import Home from './components/character-builder/Home';
-// import { RouteType } from './typings';
+import { SIMPLE_WEAPONS, MARTIAL_WEAPONS } from './character-builder/constants';
+import { Weapon as WeaponType } from './typings';
+import ArmorWrapper from './components/character-builder/Armor';
 
 interface WindowRedux extends Window {
   __REDUX_DEVTOOLS_EXTENSION__: any
@@ -61,9 +63,15 @@ const tableOfContentsRenderer = (props: any) => {
   return <TableOfContents categories={[]} changeSpotlight={fuckingTS} activeSpotlight={''} {...props} />
 }
 
-// const raceRender = (props: RouteComponentProps<{ race: string }>) => {
-//   if 
-// }
+const weaponRender = (props: RouteComponentProps<{ weaponType: string }>) => {
+  const { weaponType } = props.match.params;
+  const selectWeapon = (weapon: WeaponType) => store.dispatch({ weapon, type: 'SELECT_WEAPON' });
+  if (weaponType === 'martial') {
+    return <Weapon weaponType={weaponType} weapons={SIMPLE_WEAPONS} selectWeapon={selectWeapon} />
+  } else {
+    return <Weapon weaponType={weaponType} weapons={MARTIAL_WEAPONS} selectWeapon={selectWeapon} />
+  }
+}
 
 const characterSummaryRenderer = (props: any) => {
   return <CharacterSummary {...props} />
@@ -78,8 +86,15 @@ ReactDOM.render(
           <Route path='/races/:race' component={PlayableRaces} exact={false} />
           <Redirect from='/races' to='/races/dwarf' exact={true} />
         </Switch>
+
+        <Switch>
+          <Route path='/weapons/:weaponType' render={weaponRender} exact={true} />
+          <Redirect from='/weapons' to='/weapons/simple' exact={true} />
+        </Switch>
+
+        <Route path='/armor' component={ArmorWrapper} />
         <Route path='/abilities/:ability' component={AbilityHome.Home} exact={false} />
-        <Route path='/skills/:skill' component={SkillHome} exact={true} />
+        <Route path='/skills' component={SkillHome} exact={true} />
         <Route path='/' render={characterSummaryRenderer} />
       </div>
     </BrowserRouter>
