@@ -1,9 +1,9 @@
-.ability > a, .ability > a:visited {
+/* .ability > a, .ability > a:visited {
   text-decoration: none;
   color: #fafcfc;
   display: block;
   line-height: 60px;
-}
+} */
 
 .ability-modifier {
   line-height: 10px;
@@ -11,17 +11,53 @@
   padding-bottom: 10px;
 }
 
-#ability-character {
+.character-panel {
+  font-weight: 100;
+  font-size: 2em;
+  text-align: center;
+}
+
+#character-abilities {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  vertical-align: center;
-  text-align: center;
-  font-size: 2em;
-  font-weight: 100;
   grid-template-areas:
     "ability-inc ability ability ability ability ability ability"
     "ability-dec ability ability ability ability ability ability";
+}
+
+.char-class {
+  grid-column: 1 / 3;
+  align-self: center;
+}
+
+.char-field > a {
+  display: block;
+}
+
+.char-field-editable {
+  text-decoration: none;
+  display: block;
+  line-height: 60px;
+}
+
+.char-field-editable:visited {
+  color: #fafcfc;
+}
+
+.char-field {
+  height: 100%;
+}
+
+#character-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+/* probably shouldn't be doing this */
+#character-stats > li:not(.level-changer-inactive) {
+  display: inline-block;
+  list-style-type: none;
 }
 
 .god-dammit {
@@ -47,7 +83,7 @@
   background-color: lighten(#4c555a, 50%);
 }
 
-.ability.active-ability, .ability.active-ability > a:visited {
+.active-field, .active-field > a:visited {
   background-color: #fafcfc;
   color: #4c555a;
 }
@@ -82,4 +118,11 @@
 
 #skills {
   padding: 20px;
+}
+
+
+/* level changer stuff */
+
+.level-changer-inactive {
+  display: none;
 }

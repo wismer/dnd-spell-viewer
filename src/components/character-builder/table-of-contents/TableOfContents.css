@@ -1,5 +1,8 @@
 #toc {
   background-color: #fafcfc;
+  position: fixed;
+  overflow: scroll;
+  height: 100vh;
 }
 
 #toc li {

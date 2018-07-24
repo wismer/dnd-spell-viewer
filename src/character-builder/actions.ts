@@ -29,6 +29,10 @@ export function changeSpotlight(className: string): AnyAction {
   return { type: 'CHANGE_SPOTLIGHT', className };
 }
 
+export function changeLevel(level: number): AnyAction {
+  return { type: 'CHANGE_LEVEL', level };
+}
+
 export function activateAbility(ability: AbilityName): AnyAction {
   return {
     type: 'ACTIVATE_ATTR',

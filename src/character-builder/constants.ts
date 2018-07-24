@@ -6,6 +6,7 @@ import {
   SkillName,
   Weapon,
   WeaponProperty,
+  SkillInfo,
 } from '../typings';
 
 
@@ -223,7 +224,51 @@ export const CHARACTER_CLASSES: PrimaryClass[] = [
     skillAllowance: 2,
     savingThrows: ['wisdom', 'charisma'],
     subClassIDs: [1, 2, 3, 4]
-  }
+  },
+
+  {
+    name: 'Druid',
+    skillAllowance: 2,
+    bonusSkills: ['Arcana', 'Animal Handling', 'Insight', 'Medicine', 'Nature', 'Perception', 'Religion', 'Survival'],
+    savingThrows: ['intelligence', 'wisdom'],
+    subClassIDs: []
+  },
+
+  {
+    name: 'Thief',
+    bonusSkills: [],
+    skillAllowance: 2,
+    savingThrows: ['dexterity', 'charisma'],
+    subClassIDs: []
+  },
+  {
+    name: 'Thief',
+    bonusSkills: [],
+    skillAllowance: 2,
+    savingThrows: ['dexterity', 'charisma'],
+    subClassIDs: []
+  },
+  {
+    name: 'Thief',
+    bonusSkills: [],
+    skillAllowance: 2,
+    savingThrows: ['dexterity', 'charisma'],
+    subClassIDs: []
+  },
+  {
+    name: 'Thief',
+    bonusSkills: [],
+    skillAllowance: 2,
+    savingThrows: ['dexterity', 'charisma'],
+    subClassIDs: []
+  },
+  {
+    name: 'Thief',
+    bonusSkills: [],
+    skillAllowance: 2,
+    savingThrows: ['dexterity', 'charisma'],
+    subClassIDs: []
+  },
 ]
 
 export const SUBCLASSES: SubClass[] = [
@@ -232,32 +277,52 @@ export const SUBCLASSES: SubClass[] = [
     parentClass: 'Cleric',
     name: 'Life',
     bonusProficiencies: ['light', 'medium', 'heavy', 'simple'],
-    bonusSkills: []
+    bonusSkills: [],
+    levelRequirement: 1,
   },
   {
     id: 2,
     parentClass: 'Cleric',
     name: 'War',
     bonusProficiencies: ['light', 'medium', 'heavy', 'simple', 'martial'],
-    bonusSkills: []
+    bonusSkills: [],
+    levelRequirement: 1,
   },
   {
     id: 3,
     parentClass: 'Cleric',
     name: 'Knowledge',
     bonusProficiencies: ['light', 'medium'],
-    bonusSkills: []
+    bonusSkills: [],
+    levelRequirement: 1,
   },
   {
     id: 4,
     parentClass: 'Cleric',
     name: 'Nature',
     bonusProficiencies: ['light', 'medium'],
-    bonusSkills: []
+    bonusSkills: [],
+    levelRequirement: 1,
+  },
+  {
+    id: 5,
+    parentClass: 'Druid',
+    name: 'Circle of the Land',
+    bonusProficiencies: [],
+    bonusSkills: [],
+    levelRequirement: 2,
+  },
+  {
+    id: 6,
+    parentClass: 'Druid',
+    name: 'Circle of the Moon',
+    bonusProficiencies: [],
+    bonusSkills: [],
+    levelRequirement: 2,
   }
 ];
 
-export const ALL_SKILLS = [
+export const ALL_SKILLS: SkillInfo[] = [
   {
     name: 'Acrobatics',
     relatedAbility: 'dexterity',
