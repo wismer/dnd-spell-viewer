@@ -1,9 +1,9 @@
-.ability > a, .ability > a:visited {
+/* .ability > a, .ability > a:visited {
   text-decoration: none;
   color: #fafcfc;
   display: block;
   line-height: 60px;
-}
+} */
 
 .ability-modifier {
   line-height: 10px;
@@ -11,17 +11,52 @@
   padding-bottom: 10px;
 }
 
-#ability-character {
+.character-panel {
+  font-weight: 100;
+  font-size: 2em;
+  text-align: center;
+}
+
+#character-abilities {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  vertical-align: center;
-  text-align: center;
-  font-size: 2em;
-  font-weight: 100;
   grid-template-areas:
     "ability-inc ability ability ability ability ability ability"
     "ability-dec ability ability ability ability ability ability";
+}
+
+.char-class {
+  grid-column: 1 / 3;
+  align-self: center;
+}
+
+.char-field > a {
+  display: block;
+}
+
+.char-field-editable {
+  text-decoration: none;
+  display: block;
+  line-height: 60px;
+}
+
+.char-field-editable:visited {
+  color: #fafcfc;
+}
+
+.char-field {
+  height: 100%;
+}
+
+#character-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+/* probably shouldn't be doing this */
+#character-stats > li:not(.level-changer-inactive) {
+  list-style-type: none;
 }
 
 .god-dammit {
@@ -47,7 +82,7 @@
   background-color: lighten(#4c555a, 50%);
 }
 
-.ability.active-ability, .ability.active-ability > a:visited {
+.active-field, .active-field > a:visited {
   background-color: #fafcfc;
   color: #4c555a;
 }
@@ -75,6 +110,22 @@
   font-weight: 100;
 }
 
+.field-change {
+  color: white;
+  cursor: pointer;
+  border: black;
+  font-size: 1em;
+  font-weight: 100;
+}
+
+.field-change-inc {
+  background-color: #7e2c2c;
+}
+
+.field-change-dec {
+  background-color: #590111;
+}
+
 #character-summary {
   background-color: #363636;
   height: 100%;
@@ -82,4 +133,30 @@
 
 #skills {
   padding: 20px;
+}
+
+/* level changer stuff */
+
+.level-changer-inactive {
+  display: none;
+}
+
+.show-panel {
+  animation: slideLevelPanel 0.5s ease-in 0s 1 forwards;
+  display: flex;
+  flex-flow: column;
+  width: 50%;
+  transform: translate(-100px, 0);
+  z-index: -1;
+}
+
+@keyframes slideLevelPanel {
+  0% {
+    transform: translate(-50px, 0);
+    opacity: 0;
+  } 100% {
+    z-index: 0;
+    opacity: 1;
+    transform: translate(0, 0);
+  }
 }

@@ -93,6 +93,7 @@ export interface SubClass extends BaseClass {
   parentClass: PrimaryClassChoice;
   bonusProficiencies: string[];
   id: number;
+  levelRequirement: number;
 }
 
 
@@ -108,6 +109,7 @@ export interface CharacterBuildState {
   currentClass: PrimaryClass | null;
   currentSubClass: SubClass | null;
   activeSpotlight: string | null;
+  level: number;
 }
 
 type FaerunRaces = 'Elf' | 'Dwarf' | 'Tiefling' | 'Gnome' | 'Halfling';
@@ -121,12 +123,23 @@ export interface Race<T = number> {
   bonusSkills: SkillName[];
 }
 
-export interface Skill {
+interface BaseSkill {
+  name: SkillName;
+  relatedAbility: AbilityName;
+  description?: string;
+}
+
+export interface Skill extends BaseSkill {
   name: SkillName;
   relatedAbility: AbilityName;
   isProficient: boolean;
   value: number;
-  description?: string;
+}
+
+export interface SkillInfo extends BaseSkill {
+  addendum?: string;
+  addendumItems?: string[];
+  other?: string;
 }
 
 export interface Weapon {

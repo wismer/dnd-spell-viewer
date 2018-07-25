@@ -30,9 +30,10 @@ import PlayableRaces from './components/character-builder/PlayableRaces';
 import AbilityHome from './components/character-builder/abilities/AbilityHome';
 import Weapon from './components/character-builder/Weapon';
 import SkillHome from './components/character-builder/SkillHome';
-import { SIMPLE_WEAPONS, MARTIAL_WEAPONS } from './character-builder/constants';
-import { Weapon as WeaponType } from './typings';
+import { SIMPLE_WEAPONS, MARTIAL_WEAPONS, CHARACTER_CLASSES, SUBCLASSES } from './character-builder/constants';
+import { Weapon as WeaponType, PrimaryClass } from './typings';
 import ArmorWrapper from './components/character-builder/Armor';
+import ClassList from './components/character-builder/ClassList';
 
 interface WindowRedux extends Window {
   __REDUX_DEVTOOLS_EXTENSION__: any
@@ -56,6 +57,12 @@ const store = createStore(
   reduxWindow.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
+const classRoutes = CHARACTER_CLASSES.map((klass: PrimaryClass) => {
+  const subclasses = klass.subClassIDs.map((subclass: number) => SUBCLASSES[subclass - 1]);
+  const render = () => <ClassList primary={klass} subclasses={subclasses} />;
+  return <Route key={klass.name} render={render} path={`/classes/${klass.name}`} exact={true} />
+});
+
 const tableOfContentsRenderer = (props: any) => {
   const fuckingTS = () => {
     console.log('shit');
@@ -67,9 +74,9 @@ const weaponRender = (props: RouteComponentProps<{ weaponType: string }>) => {
   const { weaponType } = props.match.params;
   const selectWeapon = (weapon: WeaponType) => store.dispatch({ weapon, type: 'SELECT_WEAPON' });
   if (weaponType === 'martial') {
-    return <Weapon weaponType={weaponType} weapons={SIMPLE_WEAPONS} selectWeapon={selectWeapon} />
-  } else {
     return <Weapon weaponType={weaponType} weapons={MARTIAL_WEAPONS} selectWeapon={selectWeapon} />
+  } else {
+    return <Weapon weaponType={weaponType} weapons={SIMPLE_WEAPONS} selectWeapon={selectWeapon} />
   }
 }
 
@@ -80,22 +87,30 @@ const characterSummaryRenderer = (props: any) => {
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <div id='char-builder'>
+      <div>
         <Route path='/' render={tableOfContentsRenderer} />
-        <Switch>
-          <Route path='/races/:race' component={PlayableRaces} exact={false} />
-          <Redirect from='/races' to='/races/dwarf' exact={true} />
-        </Switch>
+        <div id='char-builder'>
+          <div id='toc-placeholder' />
+          <Switch>
+            <Route path='/races/:race' component={PlayableRaces} exact={false} />
+            <Redirect from='/races' to='/races/dwarf' exact={true} />
+          </Switch>
 
-        <Switch>
-          <Route path='/weapons/:weaponType' render={weaponRender} exact={true} />
-          <Redirect from='/weapons' to='/weapons/simple' exact={true} />
-        </Switch>
+          <Switch>
+            <Route path='/weapons/:weaponType' render={weaponRender} exact={true} />
+            <Redirect from='/weapons' to='/weapons/simple' exact={true} />
+          </Switch>
 
-        <Route path='/armor' component={ArmorWrapper} />
-        <Route path='/abilities/:ability' component={AbilityHome.Home} exact={false} />
-        <Route path='/skills' component={SkillHome} exact={true} />
-        <Route path='/' render={characterSummaryRenderer} />
+          <Switch>
+            {classRoutes}
+            <Redirect from='/classes' to='/classes/cleric' />
+          </Switch>
+
+          <Route path='/armor' component={ArmorWrapper} />
+          <Route path='/abilities/:ability' component={AbilityHome.Home} exact={false} />
+          <Route path='/skills' component={SkillHome} exact={true} />
+          <Route path='/' render={characterSummaryRenderer} />
+        </div>
       </div>
     </BrowserRouter>
   </Provider>,

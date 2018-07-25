@@ -1,5 +1,5 @@
 import { CharacterBuildState, Race, CharacterAbilityScore, AbilityName, Skill, SkillName, PrimaryClassChoice, PrimaryClass, SubClass } from '../typings';
-import { ALL_RACES, CHARACTER_CLASSES } from './constants';
+import { ALL_RACES, CHARACTER_CLASSES, SUBCLASSES } from './constants';
 import { AnyAction } from 'redux';
 
 // 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
@@ -17,6 +17,7 @@ const initialState: CharacterBuildState = {
   activeSpotlight: null,
   race: null,
   availablePoints: 27,
+  level: 1,
   skills: [
     {
       name: 'Acrobatics',
@@ -129,8 +130,8 @@ const initialState: CharacterBuildState = {
 
   ],
   activeAbility: null,
-  currentClass: null,
-  currentSubClass: null
+  currentClass: CHARACTER_CLASSES[0],
+  currentSubClass: SUBCLASSES[0]
 };
 
 // function updateAbilityScores(abilityScores: CharacterAbilityScore[], values: number[]): CharacterAbilityScore[] {
@@ -308,6 +309,16 @@ function changeSpotlight(state: CharacterBuildState, className: string): Charact
   return Object.assign({}, state, { activeSpotlight: className });
 }
 
+function updateLevel(state: CharacterBuildState, level: number): CharacterBuildState {
+  const currentLevel = state.level;
+  const nextLevel = currentLevel + level;
+  if (nextLevel === 0 || nextLevel > 20) {
+    return state;
+  }
+
+  return Object.assign({}, state, { level: nextLevel });
+}
+
 export function characterBuilder(state: CharacterBuildState, action: AnyAction): CharacterBuildState {
   if (typeof state === 'undefined') {
     return initialState;
@@ -324,6 +335,7 @@ export function characterBuilder(state: CharacterBuildState, action: AnyAction):
     case 'UNTRAIN_SKILL': return trainSkill(state, action.skill);
     case 'ACTIVATE_ABILITY': return activateAbility(state, action.abilityScore);
     case 'SELECT_CLASS': return updateClass(state, action.charClass);
+    case 'CHANGE_LEVEL': return updateLevel(state, action.level);
     case 'SELECT_SUBCLASS': return selectSubClass(state, action.subClass);
     case 'CHANGE_SPOTLIGHT': return changeSpotlight(state, action.className);
     default:

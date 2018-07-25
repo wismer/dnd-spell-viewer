@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
-import { TOCProps, SkillName, AppState, TOCCategory, TOCDispatch } from '../../../typings';
+import { TOCProps, AppState, TOCCategory, TOCDispatch, Race, PrimaryClass } from '../../../typings';
 import './TableOfContents.css';
 import { Dispatch } from 'redux';
+import { ALL_RACES, ALL_SKILLS, CHARACTER_CLASSES } from '../../../character-builder/constants';
 // import { changeSpotlight } from '../../../character-builder/actions';
 
 const listItemStyle = (path: string, route: string): React.CSSProperties => {
@@ -12,36 +13,57 @@ const listItemStyle = (path: string, route: string): React.CSSProperties => {
   };
 }
 
+const raceLinks = ALL_RACES.filter((race: Race) => !race.subraceOf).map((race: Race) => {
+  return (
+    <li key={race.name}>
+      <NavLink to={`/races/${race.name}`} activeClassName='expanded'>{race.name}</NavLink>
+    </li>
+  );
+});
+
+const classLinks = CHARACTER_CLASSES.map((klass: PrimaryClass) => {
+  return (
+    <li key={klass.name}>
+      <NavLink activeClassName='expanded' to={`/classes/${klass.name}`}>{klass.name}</NavLink>
+    </li>
+  );
+});
+
+const skillLinks = ALL_SKILLS.map((skill: any) => {
+  const hash = skill.name.toLowerCase().replace(/\s+/g, '-');
+  const isActive = (match: any, location: any): boolean => {
+    return location.hash === `#${hash}`;
+  }
+  return (
+    <li key={skill.name}>
+      <NavLink activeClassName='expanded' isActive={isActive} to={
+        {
+          hash,
+          pathname: '/skills'
+        }
+      }>{skill.name}</NavLink>
+    </li>
+  );
+});
+
+const abilityLinks = ['strength', 'constitution', 'dexterity', 'wisdom', 'intelligence', 'charisma'].map((ability: string) => {
+  return (
+    <li key={ability}>
+      <NavLink to={`/abilities/${ability}`} activeClassName='expanded'>{ability}</NavLink>
+    </li>
+  );
+});
+
 class TableOfContents extends React.Component<TOCProps & RouteComponentProps<TOCProps, {}>, {}> {
   public render() {
-    const { location, skillNames } = this.props;
-    const skillLinks = skillNames.map((skill: SkillName, index: number) => {
-      return (
-        <li key={index}>
-          <NavLink activeClassName='expanded' to={
-            {
-              hash: `#${skill.toLowerCase().replace(' ', '-')}`,
-              pathname: '/skills'
-            }
-          }>{skill}</NavLink>
-        </li>
-      );
-    }); 
+    const { location } = this.props;
     return (
       <div id='toc'>
         <ul>
           <li>
             <NavLink activeClassName='expanded' to='/races'>Playable Races</NavLink>
             <ul style={listItemStyle(location.pathname, 'races')}>
-              <li>
-                <NavLink activeClassName='expanded' to='/races/dwarf'>Dwarf</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/races/elf'>Elf</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/races/human'>Human</NavLink>
-              </li>
+              {raceLinks}
             </ul>
           </li>
 
@@ -49,24 +71,7 @@ class TableOfContents extends React.Component<TOCProps & RouteComponentProps<TOC
             <NavLink activeClassName='expanded' to='/abilities'>Abilities</NavLink>
 
             <ul style={listItemStyle(location.pathname, 'abilities')}>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/strength'>Strength</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/constitution'>Constitution</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/dexterity'>Dexterity</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/wisdom'>Wisdom</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/charisma'>Charisma</NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName='expanded' to='/abilities/intelligence'>Intelligence</NavLink>
-              </li>
+              {abilityLinks}
             </ul>
           </li>
 
@@ -99,37 +104,7 @@ class TableOfContents extends React.Component<TOCProps & RouteComponentProps<TOC
             <NavLink activeClassName='expanded' to='/classes'>Classes</NavLink>
 
             <ul style={listItemStyle(location.pathname, 'classes')}>
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/barbarian'>Barbarian</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/fighter'>Fighter</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/cleric'>Cleric</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/sorcerer'>Sorcerer</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/wizard'>Wizard</NavLink>
-
-              <li>
-              </li>
-                <NavLink activeClassName='expanded' to='/classes/thief'>Thief</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/bard'>Bard</NavLink>
-              </li>
-
-              <li>
-                <NavLink activeClassName='expanded' to='/classes/paladin'>Paladin</NavLink>
-              </li>
+              {classLinks}
             </ul>
           </li>
         </ul>

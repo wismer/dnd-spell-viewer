@@ -3,12 +3,12 @@ import { RouteComponentProps } from 'react-router';
 import { ALL_SKILLS } from '../../character-builder/constants';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Skill, AppState, SkillName } from '../../typings';
+import { Skill, AppState, SkillName, SkillInfo } from '../../typings';
 import { Dispatch } from 'redux';
 import { trainSkill } from '../../character-builder/actions';
 
 interface SkillHomeProps extends RouteComponentProps<{ skill: string }> {
-  skills: Skill[];
+  skills: SkillInfo[];
   focusSkill: string;
 }
 
@@ -23,6 +23,13 @@ const SkillSection = (props: any) => {
       el.scrollIntoView();
     }
   };
+
+  let addendum = null;
+
+  if (props.addendum) {
+    addendum = props.addendumItems.map((item: string, i: number) => <li key={i}>{item}</li>);
+  }
+
   return (
     <section ref={ref} id={id}>
       <h3>{props.name}</h3>
@@ -30,12 +37,20 @@ const SkillSection = (props: any) => {
       <p>{props.description}</p>
 
       <p>
-        related ability: <Link to={`/abilities/${props.relatedAttribute}`}>{props.relatedAttribute}</Link>
+        related ability: <Link to={`/abilities/${props.relatedAbility}`}>{props.relatedAbility}</Link>
       </p>
 
       <div>
         {props.children}
       </div>
+
+      <p>
+        {props.addendum}
+      </p>
+
+      <ul>
+        {addendum}
+      </ul>
     </section>
   );
 }
@@ -66,15 +81,10 @@ class SkillHome extends React.Component<SkillHomeProps & SkillHomeDispatchers, a
 
 
 const skillHomeProps = (state: AppState, ownProps: RouteComponentProps<{ skill: string }>): SkillHomeProps => {
-  const skills = state.characterBuilder.skills.map((skill: Skill, idx: number) => {
-    skill.description = ALL_SKILLS[idx].description;
-    return skill;
-  });
-
   return {
-    skills,
+    skills: ALL_SKILLS,
     ...ownProps,
-    focusSkill: ownProps.match.params.skill
+    focusSkill: ownProps.location.hash
   };
 }
 
