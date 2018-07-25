@@ -43,9 +43,10 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
   }
 
   public render() {
-    const { activeAbility, incrementAbility, decrementAbility, race, currentClassName, level } = this.props;
-    const levelChangerPanelClassName = this.state.showLevelChanger ? 'level-changer' : 'level-changer-inactive';
+    const { activeAbility, incrementAbility, decrementAbility, race, currentClassName, level, changeLevel: updateLevel } = this.props;
+    const levelChangerPanelClassName = this.state.showLevelChanger ? 'level-changer show-panel' : 'level-changer-inactive';
     const characterClassName = this.props.selectedClassField ? 'char-field active-field char-class' : 'char-field char-class';
+
     const abilities = this.props.abilities.map((ability: CharacterAbilityScore, key: number) => {
       const className = ability.full === activeAbility ? 'ability active-field' : 'ability';
       let value = ability.value;
@@ -85,8 +86,8 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
             Level {level}
           </li>
           <li className={levelChangerPanelClassName}>
-            <button className='field-change level-changer-inc'>+</button>
-            <button className='field-change level-changer-dec'>-</button>
+            <button onClick={updateLevel.bind(null, 1)} className='field-change field-change-inc'>+</button>
+            <button onClick={updateLevel.bind(null, -1)} className='field-change field-change-dec'>-</button>
           </li>
           <li/>
           <li/>

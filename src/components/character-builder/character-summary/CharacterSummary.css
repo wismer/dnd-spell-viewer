@@ -56,7 +56,6 @@
 
 /* probably shouldn't be doing this */
 #character-stats > li:not(.level-changer-inactive) {
-  display: inline-block;
   list-style-type: none;
 }
 
@@ -111,6 +110,22 @@
   font-weight: 100;
 }
 
+.field-change {
+  color: white;
+  cursor: pointer;
+  border: black;
+  font-size: 1em;
+  font-weight: 100;
+}
+
+.field-change-inc {
+  background-color: #7e2c2c;
+}
+
+.field-change-dec {
+  background-color: #590111;
+}
+
 #character-summary {
   background-color: #363636;
   height: 100%;
@@ -120,9 +135,28 @@
   padding: 20px;
 }
 
-
 /* level changer stuff */
 
 .level-changer-inactive {
   display: none;
+}
+
+.show-panel {
+  animation: slideLevelPanel 0.5s ease-in 0s 1 forwards;
+  display: flex;
+  flex-flow: column;
+  width: 50%;
+  transform: translate(-100px, 0);
+  z-index: -1;
+}
+
+@keyframes slideLevelPanel {
+  0% {
+    transform: translate(-50px, 0);
+    opacity: 0;
+  } 100% {
+    z-index: 0;
+    opacity: 1;
+    transform: translate(0, 0);
+  }
 }
