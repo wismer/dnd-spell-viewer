@@ -28,6 +28,44 @@ interface CharacterSummaryState {
   showLevelChanger: boolean;
 }
 
+interface LevelProps extends React.Props<any> {
+  className: string;
+}
+
+function CharacterLevel(props: LevelProps) {
+  return (
+    <li className={props.className}>
+      {props.children}
+    </li>
+  )
+}
+
+interface CharacterFieldProps extends React.Props<any> {
+  value: string | number;
+  label: string;
+  centered: boolean;
+  path?: string;
+}
+
+function CharacterField(props: CharacterFieldProps) {
+  let content = (
+    <>
+    <div className='field-label'>{props.label}</div>
+    <div className='field-value'>{props.value}</div>
+    </>
+  );
+
+  if (props.path) {
+    content = <Link to={props.path}>{content}</Link>; 
+  }
+
+  return (
+    <li className='character-field'> 
+      {content}
+    </li>
+  );
+}
+
 class CharacterSummary extends React.Component<CharacterSummaryProps & CharacterSummaryDispatch, CharacterSummaryState> {
   public constructor(props: CharacterSummaryProps & CharacterSummaryDispatch) {
     super(props);
@@ -36,6 +74,16 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
     };
 
     this.toggleLevelChanger = this.toggleLevelChanger.bind(this);
+    this.changeCharacterLevel = this.changeCharacterLevel.bind(this);
+  }
+
+  public changeCharacterLevel(event: React.KeyboardEvent<HTMLElement>) {
+    console.log(event);
+    if (event.keyCode === 38) {
+      this.props.changeLevel(1);
+    } else if (event.keyCode === 40) {// down
+      this.props.changeLevel(-1);
+    }
   }
 
   public toggleLevelChanger(event: React.MouseEvent<HTMLElement>) {
@@ -85,12 +133,16 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
           <li onClick={this.toggleLevelChanger} className='char-field char-level'>
             Level {level}
           </li>
-          <li className={levelChangerPanelClassName}>
+          <li onKeyPress={this.changeCharacterLevel} className={levelChangerPanelClassName}>
             <button onClick={updateLevel.bind(null, 1)} className='field-change field-change-inc'>+</button>
             <button onClick={updateLevel.bind(null, -1)} className='field-change field-change-dec'>-</button>
           </li>
-          <li/>
-          <li/>
+
+          <CharacterLevel className={levelChangerPanelClassName}>
+            <button onClick={updateLevel.bind(null, 1)} className='field-change field-change-inc'>+</button>
+            <button onClick={updateLevel.bind(null, -1)} className='field-change field-change-dec'>-</button>
+          </CharacterLevel>
+          <CharacterField path='/classes/cleric' centered={false} value={currentClassName as string} label='Class' />
         </div>
 
         <section id='skills'>

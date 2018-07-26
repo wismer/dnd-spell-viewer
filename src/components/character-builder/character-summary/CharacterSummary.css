@@ -79,7 +79,7 @@
 }
 
 .ability:hover {
-  background-color: lighten(#4c555a, 50%);
+  background-color: #6a767c;
 }
 
 .active-field, .active-field > a:visited {
@@ -148,6 +148,28 @@
   width: 50%;
   transform: translate(-100px, 0);
   z-index: -1;
+}
+
+.character-field {
+  background-color: #4c555a;
+  color: #fafcfc;
+  display: flex;
+  flex-flow: column;
+  padding: 5px;
+}
+
+.character-field:hover {
+  background-color: #6a767c;
+  animation: slideLevelPanel 0.5s ease-in 0s 1 forwards;
+}
+
+.field-label {
+  align-self: flex-start;
+  font-size: 10px;
+}
+
+.field-value {
+  align-self: center;
 }
 
 @keyframes slideLevelPanel {
