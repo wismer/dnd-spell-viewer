@@ -3,6 +3,7 @@
   position: fixed;
   overflow: scroll;
   height: 100vh;
+  width: 190px;
 }
 
 #toc li {
@@ -19,11 +20,11 @@
   text-decoration: none;
 }
 
-a:not(.expanded) {
+#toc a:not(.expanded) {
   color: #4c555a;
 }
 
-a.expanded {
+#toc a.expanded {
   color: #0099e5;
 }
 

@@ -6,7 +6,7 @@ body {
 
 #char-builder {
   display: grid;
-  grid-template-columns: 0.3fr 1fr 1fr;
+  grid-template-columns: 0.4fr 1fr 1fr;
 }
 
 #char-builder > section {
@@ -17,3 +17,7 @@ article {
   padding: 20px;
 }
 
+a, a:visited {
+  text-decoration: none;
+  color: white;
+}

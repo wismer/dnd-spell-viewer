@@ -81,8 +81,12 @@ class SkillHome extends React.Component<SkillHomeProps & SkillHomeDispatchers, a
 
 
 const skillHomeProps = (state: AppState, ownProps: RouteComponentProps<{ skill: string }>): SkillHomeProps => {
+  let skills = ALL_SKILLS;
+  if (ownProps.location.hash) {
+    skills = skills.filter((skill: SkillInfo) => skill.name.toLowerCase().replace(/\s+/g, '-') === ownProps.location.hash.replace('#', ''));
+  }
   return {
-    skills: ALL_SKILLS,
+    skills,
     ...ownProps,
     focusSkill: ownProps.location.hash
   };

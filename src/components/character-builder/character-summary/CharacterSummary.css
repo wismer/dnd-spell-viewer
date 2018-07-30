@@ -79,12 +79,16 @@
 }
 
 .ability:hover {
-  background-color: lighten(#4c555a, 50%);
+  background-color: #6a767c;
 }
 
 .active-field, .active-field > a:visited {
   background-color: #fafcfc;
   color: #4c555a;
+}
+
+.active-field:hover {
+  background-color: #fafcfc;
 }
 
 #ability-inc {
@@ -127,13 +131,33 @@
 }
 
 #character-summary {
-  background-color: #363636;
+  background: linear-gradient(to right, #4c555a, #626d74);
   height: 100%;
 }
 
-#skills {
-  padding: 20px;
+.label-lg {
+  font-size: 20px;
 }
+/* Skill Stuff */
+
+#skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.trained-skill {
+  background-color: #7e2c2c;
+}
+
+.algn-horizontal {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+/* .skills > div.character-field:hover {
+  box-shadow: 1px 1px 1px 1px black;
+} */
 
 /* level changer stuff */
 
@@ -150,6 +174,75 @@
   z-index: -1;
 }
 
+.character-field {
+  color: #fafcfc;
+  display: flex;
+  flex-flow: column;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.character-field:hover {
+  background-color: #6a767c;
+  animation: raiseSkill 300ms linear 0s 1 forwards;
+  /* box-shadow: 1px 1px 1px 1px black; */
+}
+
+.character-field a {
+  height: 100%;
+}
+
+.field-label {
+  align-self: flex-start;
+  font-size: 10px;
+}
+
+.character-field.label-lg div.field-label {
+  font-size: 12px;
+}
+
+.field-value {
+  align-self: center;
+}
+
+#personal-fields {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas: 
+    "char-name char-name . char-class char-class"
+    "char-lvl . char-alignment char-alignment char-race";
+}
+
+
+#personal-fields div:nth-child(1) {
+  grid-area: char-name;
+}
+
+#personal-fields div:nth-child(2) {
+  grid-area: char-class;
+}
+
+#personal-fields div:nth-child(3) {
+  grid-area: char-lvl;
+}
+
+#personal-fields div:nth-child(4) {
+  grid-area: char-alignment;
+}
+
+#personal-fields div:nth-child(5) {
+  grid-area: char-race;
+}
+
+input[type=text], input[type=number] {
+  outline: 0;
+  background-color: #4c555a;
+  padding: 10px;
+  border: 0;
+  color: white;
+  -webkit-appearance: none;
+}
+
 @keyframes slideLevelPanel {
   0% {
     transform: translate(-50px, 0);
@@ -158,5 +251,12 @@
     z-index: 0;
     opacity: 1;
     transform: translate(0, 0);
+  }
+}
+@keyframes raiseSkill {
+  from {
+    box-shadow: unset;
+  } to {
+    box-shadow: 1px 1px 1px 1px black;
   }
 }
