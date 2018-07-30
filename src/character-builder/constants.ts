@@ -7,6 +7,7 @@ import {
   Weapon,
   WeaponProperty,
   SkillInfo,
+  AlignmentInfo,
 } from '../typings';
 
 
@@ -242,28 +243,28 @@ export const CHARACTER_CLASSES: PrimaryClass[] = [
     subClassIDs: []
   },
   {
-    name: 'Thief',
+    name: 'Fighter',
     bonusSkills: [],
     skillAllowance: 2,
     savingThrows: ['dexterity', 'charisma'],
     subClassIDs: []
   },
   {
-    name: 'Thief',
+    name: 'Paladin',
     bonusSkills: [],
     skillAllowance: 2,
     savingThrows: ['dexterity', 'charisma'],
     subClassIDs: []
   },
   {
-    name: 'Thief',
+    name: 'Sorcerer',
     bonusSkills: [],
     skillAllowance: 2,
     savingThrows: ['dexterity', 'charisma'],
     subClassIDs: []
   },
   {
-    name: 'Thief',
+    name: 'Wizard',
     bonusSkills: [],
     skillAllowance: 2,
     savingThrows: ['dexterity', 'charisma'],
@@ -533,3 +534,38 @@ export const MARTIAL_WEAPONS: Weapon[] = [
     properties: [HEAVY, TWO_HANDED]
   }
 ]
+
+export const ALIGNMENTS: AlignmentInfo[] = [
+  {
+    name: 'Lawful Good',
+    description: ''
+  },
+  {
+    name: 'Lawful Neutral',
+    description: ''
+  },
+  {
+    name: 'Neutral Good',
+    description: ''
+  },
+  {
+    name: 'Neutral (undecided)',
+    description: ''
+  },
+  {
+    name: 'Chaotic Good',
+    description: ''
+  },
+  {
+    name: 'Lawful Evil',
+    description: ''
+  },
+  {
+    name: 'Chaotic Evil',
+    description: ''
+  },
+  {
+    name: 'Neutral Evil',
+    description: ''
+  }
+];

@@ -5,6 +5,8 @@ import { AnyAction } from 'redux';
 // 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 
 const initialState: CharacterBuildState = {
+  characterName: 'Gimli Strom',
+  alignment: 'Neutral (undecided)',
   abilityScores: [
     { short: 'str', full: 'strength', value: 8, modifier: -1 },
     { short: 'wis', full: 'wisdom', value: 8, modifier: -1 },
@@ -29,7 +31,7 @@ const initialState: CharacterBuildState = {
       name: 'Animal Handling',
       relatedAbility: 'wisdom',
       value: -1,
-      isProficient: false
+      isProficient: true
     },
     {
       name: 'Arcana',
@@ -53,7 +55,7 @@ const initialState: CharacterBuildState = {
       name: 'History',
       relatedAbility: 'intelligence',
       value: -1,
-      isProficient: false
+      isProficient: true
     },
     {
       name: 'Insight',
@@ -71,7 +73,7 @@ const initialState: CharacterBuildState = {
       name: 'Investigation',
       relatedAbility: 'intelligence',
       value: -1,
-      isProficient: false
+      isProficient: true
     },
     {
       name: 'Medicine',
@@ -195,13 +197,14 @@ function abilityScoreCost(n: number): number {
   }
 }
 
-function updateSkills(skills: Skill[], abilityScore: AbilityName, value: number): Skill[] {
+function updateSkills(skills: Skill[], ability: AbilityName, value: number): Skill[] {
   const copy = skills.slice()
   for (const skill of copy) {
-    if (skill.relatedAbility === abilityScore) {
+    if (skill.relatedAbility === ability) {
       skill.value = value;
     }
   }
+
   return copy;
 }
 
@@ -310,13 +313,15 @@ function changeSpotlight(state: CharacterBuildState, className: string): Charact
 }
 
 function updateLevel(state: CharacterBuildState, level: number): CharacterBuildState {
-  const currentLevel = state.level;
-  const nextLevel = currentLevel + level;
-  if (nextLevel === 0 || nextLevel > 20) {
-    return state;
+  return Object.assign({}, state, { level });
+}
+
+function changeName(state: CharacterBuildState, characterName: string): CharacterBuildState {
+  if (state.characterName !== characterName) {
+    return Object.assign({}, state, { characterName });
   }
 
-  return Object.assign({}, state, { level: nextLevel });
+  return state;
 }
 
 export function characterBuilder(state: CharacterBuildState, action: AnyAction): CharacterBuildState {
@@ -336,6 +341,7 @@ export function characterBuilder(state: CharacterBuildState, action: AnyAction):
     case 'ACTIVATE_ABILITY': return activateAbility(state, action.abilityScore);
     case 'SELECT_CLASS': return updateClass(state, action.charClass);
     case 'CHANGE_LEVEL': return updateLevel(state, action.level);
+    case 'CHANGE_NAME': return changeName(state, action.name);
     case 'SELECT_SUBCLASS': return selectSubClass(state, action.subClass);
     case 'CHANGE_SPOTLIGHT': return changeSpotlight(state, action.className);
     default:

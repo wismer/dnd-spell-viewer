@@ -100,6 +100,8 @@ export interface SubClass extends BaseClass {
 export interface CharacterBuildState {
   // primaryClass: PrimaryClass;
   // secondaryClass: SecondaryClass;
+  alignment: Alignment,
+  characterName: string;
   abilityScores: CharacterAbilityScore[];
   proficiencies: string[];
   race: Race | null;
@@ -123,14 +125,16 @@ export interface Race<T = number> {
   bonusSkills: SkillName[];
 }
 
-interface BaseSkill {
-  name: SkillName;
-  relatedAbility: AbilityName;
+interface GameProperty<T> {
+  name: T;
   description?: string;
 }
 
+interface BaseSkill extends GameProperty<SkillName> {
+  relatedAbility: AbilityName;
+}
+
 export interface Skill extends BaseSkill {
-  name: SkillName;
   relatedAbility: AbilityName;
   isProficient: boolean;
   value: number;
@@ -142,15 +146,17 @@ export interface SkillInfo extends BaseSkill {
   other?: string;
 }
 
+export interface AlignmentInfo extends GameProperty<Alignment> {}
+
 export interface Weapon {
   name: string;
   damageType: 'bludgeoning' | 'slashing' | 'piercing';
-  damage: Dice;
+  damage: Die;
   properties: WeaponProperty[];
   isMartialWeapon: boolean;
   isRanged: boolean;
   range?: number[];
-  versatileDamage?: Dice;
+  versatileDamage?: Die;
   cost?: number;
 }
 
@@ -172,7 +178,7 @@ export interface ItemProperty {
 
 export interface WeaponProperty extends ItemProperty {}
 
-export interface Dice {
+export interface Die {
   die: 4 | 6 | 8 | 10 | 12 | 20;
   count: number;
 }
@@ -181,8 +187,7 @@ export type PrimaryClassChoice = 'Fighter' | 'Paladin' | 'Wizard' | 'Sorcerer' |
 export type AbilityName = 'dexterity' | 'strength' | 'intelligence' | 'charisma' | 'wisdom' | 'constitution';
 export type SkillName = 'Investigation' | 'History' | 'Perception' | 'Intimidation' | 'Arcana' | 'Acrobatics' | 'Medicine' | 'Insight' | 'Persuasion' | 'Religion' | 'Athletics' | 'Sleight of Hand' | 'Stealth' | 'Nature' | 'Animal Handling' | 'Survival' | 'Deception' | 'Performance'
 export type ArmorClass = 'light' | 'medium' | 'heavy';
-
-
+export type Alignment = 'Lawful Good' | 'Neutral Good' | 'Chaotic Good' | 'Lawful Neutral' | 'Chaotic Neutral' | 'Neutral (undecided)' | 'Lawful Evil' | 'Chaotic Evil' | 'Neutral Evil';
 
 // REACT COMPONENT TYPES
 
