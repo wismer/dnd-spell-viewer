@@ -201,10 +201,10 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
 
     const abilities = this.props.abilities.map((ability: CharacterAbilityScore, idx: number) => {
       const className = ability.full === activeAbility ? 'ability active-field' : 'ability';
-      let value = ability.value;
+      const value = ability.value;
 
       if (race) {
-        value += race.abilityScores[idx];
+        // value += race.abilityScores[idx];
       }
 
       const modifier = Math.floor((value - 10) / 2);

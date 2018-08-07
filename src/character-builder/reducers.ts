@@ -190,7 +190,7 @@ function AbilityScoreFn(abilityScores: CharacterAbilityScore[], pts: number): Ab
       if (value + step < 8 || value + step > 15 || pointsAvailable < 0) {
         return AbilityScoreFn(abilityScores, pts);
       }
-      debugger
+
       ability = Object.assign({}, ability, { value: ability.value + step });
       abilityScores = Object.assign([], abilityScores, { [idx]: ability });
       return AbilityScoreFn(abilityScores, pointsAvailable);
@@ -209,6 +209,40 @@ function AbilityScoreFn(abilityScores: CharacterAbilityScore[], pts: number): Ab
       return { abilityScores, availablePoints: pts };
     }
   };
+}
+
+interface SkillFunctor {
+  updateModifiers: (abilityScores: CharacterAbilityScore[]) => SkillFunctor;
+  toggleSkill: (fn: (skill: Skill) => boolean) => SkillFunctor;
+  toValue: () => Skill[];
+}
+
+function SkillFn(skills: Skill[]): SkillFunctor {
+  return {
+    updateModifiers: (abilityScores: CharacterAbilityScore[]) => {
+      return SkillFn(
+        skills.map((skill: Skill) => {
+          const ability = abilityScores.find((score: CharacterAbilityScore) => score.full === skill.relatedAbility) as CharacterAbilityScore;
+          skill.value = ability.modifier + (skill.isProficient ? 2 : -2);
+          return skill;
+        })
+      )
+    },
+
+    toggleSkill: (fn: (skill: Skill) => boolean) => {
+      return SkillFn(
+        skills.map((skill: Skill) => {
+          if (fn(skill)) {
+            skill.isProficient = !skill.isProficient;
+          }
+
+          return skill;
+        })
+      )
+    },
+
+    toValue: () => skills
+  }
 }
 
 /*
@@ -240,22 +274,34 @@ function changeRace(state: CharacterBuildState, targetRace: string): CharacterBu
     return state;
   }
 
-  let skills = state.skills;
+  const { abilityScores } = AbilityScoreFn(state.abilityScores, state.availablePoints)
+    .zip(currentRace ? currentRace.abilityScores : [0, 0, 0, 0, 0, 0])
+    .unzip(race.abilityScores)
+    .updateModifiers()
+    .toValue()
+
+  
+
+  let skills = SkillFn(state.skills)
   let bonusSkills = race.bonusSkills;
   let currentBonusSkills: SkillName[] = [];
+
+
   if (currentRace && currentRace.name !== targetRace) {
     currentBonusSkills = currentRace.bonusSkills;
   }
 
   bonusSkills = bonusSkills.concat(currentBonusSkills);
-  for (const name of bonusSkills) {
-    const idx = skills.findIndex((skill: Skill) => skill.name === name);
-    if (idx > -1) {
-      skills = Object.assign([], skills, { [idx]: updateSkill(skills[idx]) });
-    }
+
+  for (const bonusSkill of bonusSkills) {
+    skills = skills.toggleSkill((skill: Skill) => skill.name === bonusSkill);
   }
 
-  return Object.assign({}, state, { race, skills });
+  const updatedSkills = skills
+    .updateModifiers(abilityScores)
+    .toValue();
+
+  return Object.assign({}, state, { race, skills: updatedSkills, abilityScores });
 }
 
 function getModifier(n: number): number {
@@ -285,16 +331,16 @@ function abilityScoreCost(scores: number[]): number[] {
 //   return copy;
 // }
 
-function updateSkill(skill: Skill): Skill {
-  let value = skill.value;
-  if (skill.isProficient) {
-    value -= 2;
-  } else {
-    value += 2;
-  }
+// function updateSkill(skill: Skill): Skill {
+//   let value = skill.value;
+//   if (skill.isProficient) {
+//     value -= 2;
+//   } else {
+//     value += 2;
+//   }
 
-  return Object.assign({}, skill, { value, isProficient: !skill.isProficient });
-}
+//   return Object.assign({}, skill, { value, isProficient: !skill.isProficient });
+// }
 
 function changeAbilityScore(state: CharacterBuildState, abilityScore: string | null, step: number): CharacterBuildState {
   if (!abilityScore) {
