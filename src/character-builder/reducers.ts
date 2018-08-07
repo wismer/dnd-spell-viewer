@@ -142,6 +142,81 @@ const initialState: CharacterBuildState = {
 //     .map((attr: CharacterAbilityScore, idx: number) => Object.assign({}, attr, { modifier: getModifier(attr.value) }));
 // }
 
+interface AbilityFnReturn {
+  availablePoints: number,
+  abilityScores: CharacterAbilityScore[]
+};
+
+interface AbilityFunctor {
+  zip: (racialScores: number[]) => AbilityFunctor;
+  unzip: (racialScores: number[]) => AbilityFunctor;
+  changeValueBy: (fn: (ability: CharacterAbilityScore) => boolean, step: number) => AbilityFunctor;
+  updateModifiers: () => AbilityFunctor;
+  toValue: () => AbilityFnReturn;
+}
+
+function AbilityScoreFn(abilityScores: CharacterAbilityScore[], pts: number): AbilityFunctor {
+  return {
+    updateModifiers: () => {
+      const scores = abilityScores.map((score: CharacterAbilityScore) => {
+        score.modifier = getModifier(score.value);
+        return score;
+      });
+
+      return AbilityScoreFn(scores, pts);
+    },
+
+    zip: (racialScores: number[]) => {
+      const scores = abilityScores.map((score: CharacterAbilityScore, index: number) => {
+        score.value -= racialScores[index];
+        return score;
+      });
+      return AbilityScoreFn(scores, pts);
+    },
+
+    changeValueBy: (fn: (ability: CharacterAbilityScore) => boolean, step: number) => {
+      const idx = abilityScores.findIndex(fn);
+      let ability = abilityScores[idx];
+      const value = ability.value;
+      let pointsAvailable = pts;
+      const [prevCost, cost] = abilityScoreCost([ability.value, ability.value + step]);
+      
+      if (step === 1) {
+        pointsAvailable -= cost - prevCost;
+      } else {
+        pointsAvailable += Math.abs(prevCost - cost);
+      }
+
+      if (value + step < 8 || value + step > 15 || pointsAvailable < 0) {
+        return AbilityScoreFn(abilityScores, pts);
+      }
+      debugger
+      ability = Object.assign({}, ability, { value: ability.value + step });
+      abilityScores = Object.assign([], abilityScores, { [idx]: ability });
+      return AbilityScoreFn(abilityScores, pointsAvailable);
+    },
+
+    unzip: (racialScores: number[]) => {
+      const scores = abilityScores.map((score: CharacterAbilityScore, index: number) => {
+        score.value += racialScores[index];
+        return score;
+      });
+
+      return AbilityScoreFn(scores, pts);
+    },
+
+    toValue: () => {
+      return { abilityScores, availablePoints: pts };
+    }
+  };
+}
+
+/*
+  scores
+    .increase(stat => state.name === thing)
+    
+*/ 
+
 function updateClass(state: CharacterBuildState, charClass: PrimaryClassChoice): CharacterBuildState {
   // let { skills } = state;
   if (state.currentClass && charClass === state.currentClass.name) {
@@ -187,26 +262,28 @@ function getModifier(n: number): number {
   return Math.floor((n - 10) / 2);
 }
 
-function abilityScoreCost(n: number): number {
-  if (n <= 13) {
-    return n - 8;
-  } else if (n === 14) {
-    return 7;
-  } else {
-    return 9;
-  }
-}
-
-function updateSkills(skills: Skill[], ability: AbilityName, value: number): Skill[] {
-  const copy = skills.slice()
-  for (const skill of copy) {
-    if (skill.relatedAbility === ability) {
-      skill.value = value;
+function abilityScoreCost(scores: number[]): number[] {
+  return scores.map((n: number) => {
+    if (n <= 13) {
+      return n - 8;
+    } else if (n === 14) {
+      return 7;
+    } else {
+      return 9;
     }
-  }
-
-  return copy;
+  });
 }
+
+// function updateSkills(skills: Skill[], ability: AbilityName, value: number): Skill[] {
+//   const copy = skills.slice()
+//   for (const skill of copy) {
+//     if (skill.relatedAbility === ability) {
+//       skill.value = value;
+//     }
+//   }
+
+//   return copy;
+// }
 
 function updateSkill(skill: Skill): Skill {
   let value = skill.value;
@@ -224,37 +301,50 @@ function changeAbilityScore(state: CharacterBuildState, abilityScore: string | n
     return state;
   }
 
-  const idx = state.abilityScores.findIndex((a: CharacterAbilityScore) => a.full === abilityScore);
-  const abilityScores = state.abilityScores.slice();
-  let availablePoints = state.availablePoints;
+  const racialScores = state.race ? state.race.abilityScores : [0, 0, 0, 0, 0, 0];
+  const beforeValues = state.abilityScores.map((score: CharacterAbilityScore) => score.value);
+  const beforePts = state.availablePoints;
+  const { abilityScores, availablePoints } = AbilityScoreFn(state.abilityScores, state.availablePoints)
+    .zip(racialScores) // strip out racial bonuses
+    .changeValueBy((ability: CharacterAbilityScore) => ability.full === abilityScore, step) // apply the change. won't alter if there are not enough points or go out of bounds
+    .unzip(racialScores) // restore racial bonuses
+    .updateModifiers() // *then* update the modifiers with the racial bonuses included
+    .toValue(); // finally return the values and points remaining.
   
-  const attr = abilityScores[idx];
-  const value = attr.value;
-  const prevCost = abilityScoreCost(value);
-  const cost = abilityScoreCost(value + step);
+  const afterValues = abilityScores.map((score: CharacterAbilityScore) => score.value);
 
-  if (step === 1) {
-    availablePoints -= cost - prevCost;
-  } else {
-    availablePoints += Math.abs(prevCost - cost);
-  }
+  console.log({ beforeValues, afterValues, beforePts });
+  // console.log({functor, abilityScores: state.abilityScores});
+  // const idx = state.abilityScores.findIndex((a: CharacterAbilityScore) => a.full === abilityScore);
+  // const abilityScores = state.abilityScores.slice();
+  // let availablePoints = state.availablePoints;
+  
+  // const attr = abilityScores[idx];
+  // const value = attr.value;
+  // const [prevCost, cost] = abilityScoreCost([value, value + step]);
+  
+  // if (step === 1) {
+  //   availablePoints -= cost - prevCost;
+  // } else {
+  //   availablePoints += Math.abs(prevCost - cost);
+  // }
 
-  if (value + step < 8 || value + step > 15 || availablePoints < 0) {
-    return state;
-  }
+  // if (value + step < 8 || value + step > 15 || availablePoints < 0) {
+  //   return state;
+  // }
 
-  let racialBonus = 0;
-  if (state.race) {
-    racialBonus += state.race.abilityScores[idx];
-  }
+  // let racialBonus = 0;
+  // if (state.race) {
+  //   racialBonus += state.race.abilityScores[idx];
+  // }
 
-  abilityScores[idx] = Object.assign({}, attr, {
-    value: attr.value + step,
-    modifier: getModifier(attr.value + step + racialBonus)
-  });
+  // abilityScores[idx] = Object.assign({}, attr, {
+  //   value: attr.value + step,
+  //   modifier: getModifier(attr.value + step + racialBonus)
+  // });
 
-  const skills = updateSkills(state.skills, abilityScore as AbilityName, abilityScores[idx].modifier);
-  return Object.assign({}, state, { abilityScores, availablePoints, skills });
+  // const skills = updateSkills(state.skills, abilityScore as AbilityName, abilityScores[idx].modifier);
+  return Object.assign({}, state, { abilityScores, availablePoints });
 }
 
 function resetPoints(state: CharacterBuildState): CharacterBuildState {
@@ -324,6 +414,23 @@ function changeName(state: CharacterBuildState, characterName: string): Characte
   return state;
 }
 
+// function calculateAbilityScoreCost(state: CharacterBuildState, index: number, step: number): number {
+//   const ability = state.abilityScores[index];
+//   const racialBonus = state.race ? state.race.abilityScores : [0, 0, 0, 0, 0, 0];
+//   const value = ability.value - racialBonus[index];
+//   console.log({ value: ability.value, afterChange: value });
+//   const prevCost = abilityScoreCost(value);
+//   const cost = abilityScoreCost(value + step);
+//   let availablePoints = state.availablePoints;
+//   if (step === 1) {
+//     availablePoints -= cost - prevCost;
+//   } else {
+//     availablePoints += Math.abs(prevCost - cost);
+//   }
+
+//   return availablePoints;
+// }
+
 export function characterBuilder(state: CharacterBuildState, action: AnyAction): CharacterBuildState {
   if (typeof state === 'undefined') {
     return initialState;
@@ -347,5 +454,4 @@ export function characterBuilder(state: CharacterBuildState, action: AnyAction):
     default:
       return state;
   }
-
 }
