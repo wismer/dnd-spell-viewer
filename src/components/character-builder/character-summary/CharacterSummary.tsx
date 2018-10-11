@@ -201,7 +201,7 @@ class CharacterSummary extends React.Component<CharacterSummaryProps & Character
 
     const abilities = this.props.abilities.map((ability: CharacterAbilityScore, idx: number) => {
       const className = ability.full === activeAbility ? 'ability active-field' : 'ability';
-      const value = ability.value;
+      const value = ability.baseValue + ability.playerBonus + ability.racialBonus;
 
       if (race) {
         // value += race.abilityScores[idx];

@@ -20,12 +20,13 @@ import {
   // MiddlewareAPI,
   // AnyAction
 } from 'redux';
+import * as Loadable from 'react-loadable';
 import { spellSearcher } from './reducers';
 import { characterBuilder } from './character-builder/reducers';
 import { Provider } from 'react-redux';
 // import CharacterBuilder from './components/character-builder/CharacterBuilder';
 import TableOfContents from './components/character-builder/table-of-contents/TableOfContents';
-import CharacterSummary from './components/character-builder/character-summary/CharacterSummary';
+// import CharacterSummary from './components/character-builder/character-summary/CharacterSummary';
 import PlayableRaces from './components/character-builder/PlayableRaces';
 import AbilityHome from './components/character-builder/abilities/AbilityHome';
 import Weapon from './components/character-builder/Weapon';
@@ -38,6 +39,11 @@ import ClassList from './components/character-builder/ClassList';
 interface WindowRedux extends Window {
   __REDUX_DEVTOOLS_EXTENSION__: any
 }
+
+const CharacterSummary = Loadable({
+  loading: () => <h1>LOADING MFER</h1>,
+  loader: () => import('./components/character-builder/character-summary/CharacterSummary')
+});
 
 const reduxWindow: WindowRedux = window as WindowRedux;
 // const logger = (api: MiddlewareAPI<AppState>) => {

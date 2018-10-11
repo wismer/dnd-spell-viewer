@@ -18,8 +18,8 @@ class PlayableRaces extends React.Component<PlayableRacesProps & PlayableRacesDi
       const fn = this.props.changeRace.bind(null, r.name);
       const button = r.isPlayable ? <button onClick={fn}>Play as a {r.name}</button> : null;
       const benefits = r.abilityScores
-        .filter((score: CharacterAbilityScore) => score.value > 0)
-        .map((score: CharacterAbilityScore) => <li key={score.short}>{score.short.toUpperCase()}: {score.value}</li>);
+        .filter((score: CharacterAbilityScore) => score.racialBonus > 0)
+        .map((score: CharacterAbilityScore) => <li key={score.short}>{score.short.toUpperCase()}: {score.racialBonus}</li>);
       
       const benefitSection = r.isPlayable ? (
         <div>
@@ -68,7 +68,7 @@ const playableRacesProps = (state: AppState, ownProps: RouteComponentProps<{ rac
     options = races.map<Race<CharacterAbilityScore>>((r: Race) => {
       const abilities = r.abilityScores.map((n: number, i: number) => {
         const score = Object.assign({}, charAbilityScores[i]);
-        score.value = n;
+        score.racialBonus = n;
         return score;
       });
 

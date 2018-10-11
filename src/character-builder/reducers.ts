@@ -8,12 +8,12 @@ const initialState: CharacterBuildState = {
   characterName: 'Gimli Strom',
   alignment: 'Neutral (undecided)',
   abilityScores: [
-    { short: 'str', full: 'strength', value: 8, modifier: -1 },
-    { short: 'wis', full: 'wisdom', value: 8, modifier: -1 },
-    { short: 'int', full: 'intelligence', value: 8, modifier: -1 },
-    { short: 'cha', full: 'charisma', value: 8, modifier: -1 },
-    { short: 'con', full: 'constitution', value: 8, modifier: -1 },
-    { short: 'dex', full: 'dexterity', value: 8, modifier: -1 },
+    { short: 'str', full: 'strength', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
+    { short: 'wis', full: 'wisdom', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
+    { short: 'int', full: 'intelligence', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
+    { short: 'cha', full: 'charisma', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
+    { short: 'con', full: 'constitution', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
+    { short: 'dex', full: 'dexterity', playerBonus: 0, racialBonus: 0, baseValue: 8, modifier: -1 },
   ],
   proficiencies: [],
   activeSpotlight: null,
@@ -148,8 +148,6 @@ interface AbilityFnReturn {
 };
 
 interface AbilityFunctor {
-  zip: (racialScores: number[]) => AbilityFunctor;
-  unzip: (racialScores: number[]) => AbilityFunctor;
   changeValueBy: (fn: (ability: CharacterAbilityScore) => boolean, step: number) => AbilityFunctor;
   updateModifiers: () => AbilityFunctor;
   toValue: () => AbilityFnReturn;
@@ -159,27 +157,19 @@ function AbilityScoreFn(abilityScores: CharacterAbilityScore[], pts: number): Ab
   return {
     updateModifiers: () => {
       const scores = abilityScores.map((score: CharacterAbilityScore) => {
-        score.modifier = getModifier(score.value);
+        // score.modifier = getModifier(score.value);
         return score;
       });
 
-      return AbilityScoreFn(scores, pts);
-    },
-
-    zip: (racialScores: number[]) => {
-      const scores = abilityScores.map((score: CharacterAbilityScore, index: number) => {
-        score.value -= racialScores[index];
-        return score;
-      });
       return AbilityScoreFn(scores, pts);
     },
 
     changeValueBy: (fn: (ability: CharacterAbilityScore) => boolean, step: number) => {
       const idx = abilityScores.findIndex(fn);
       let ability = abilityScores[idx];
-      const value = ability.value;
+      const value = ability.baseValue + ability.playerBonus;
       let pointsAvailable = pts;
-      const [prevCost, cost] = abilityScoreCost([ability.value, ability.value + step]);
+      const [prevCost, cost] = abilityScoreCost([value, value + step]);
       
       if (step === 1) {
         pointsAvailable -= cost - prevCost;
@@ -191,18 +181,9 @@ function AbilityScoreFn(abilityScores: CharacterAbilityScore[], pts: number): Ab
         return AbilityScoreFn(abilityScores, pts);
       }
 
-      ability = Object.assign({}, ability, { value: ability.value + step });
+      ability = Object.assign({}, ability, { playerBonus: ability.playerBonus + step });
       abilityScores = Object.assign([], abilityScores, { [idx]: ability });
       return AbilityScoreFn(abilityScores, pointsAvailable);
-    },
-
-    unzip: (racialScores: number[]) => {
-      const scores = abilityScores.map((score: CharacterAbilityScore, index: number) => {
-        score.value += racialScores[index];
-        return score;
-      });
-
-      return AbilityScoreFn(scores, pts);
     },
 
     toValue: () => {
@@ -275,8 +256,6 @@ function changeRace(state: CharacterBuildState, targetRace: string): CharacterBu
   }
 
   const { abilityScores } = AbilityScoreFn(state.abilityScores, state.availablePoints)
-    .zip(currentRace ? currentRace.abilityScores : [0, 0, 0, 0, 0, 0])
-    .unzip(race.abilityScores)
     .updateModifiers()
     .toValue()
 
@@ -304,9 +283,6 @@ function changeRace(state: CharacterBuildState, targetRace: string): CharacterBu
   return Object.assign({}, state, { race, skills: updatedSkills, abilityScores });
 }
 
-function getModifier(n: number): number {
-  return Math.floor((n - 10) / 2);
-}
 
 function abilityScoreCost(scores: number[]): number[] {
   return scores.map((n: number) => {
@@ -343,54 +319,19 @@ function abilityScoreCost(scores: number[]): number[] {
 // }
 
 function changeAbilityScore(state: CharacterBuildState, abilityScore: string | null, step: number): CharacterBuildState {
-  if (!abilityScore) {
-    return state;
-  }
+  return state;
 
-  const racialScores = state.race ? state.race.abilityScores : [0, 0, 0, 0, 0, 0];
-  const beforeValues = state.abilityScores.map((score: CharacterAbilityScore) => score.value);
-  const beforePts = state.availablePoints;
-  const { abilityScores, availablePoints } = AbilityScoreFn(state.abilityScores, state.availablePoints)
-    .zip(racialScores) // strip out racial bonuses
-    .changeValueBy((ability: CharacterAbilityScore) => ability.full === abilityScore, step) // apply the change. won't alter if there are not enough points or go out of bounds
-    .unzip(racialScores) // restore racial bonuses
-    .updateModifiers() // *then* update the modifiers with the racial bonuses included
-    .toValue(); // finally return the values and points remaining.
+  // const beforeValues = state.abilityScores.map((score: CharacterAbilityScore) => score.value);
+  // const beforePts = state.availablePoints;
+  // const { abilityScores, availablePoints } = AbilityScoreFn(state.abilityScores, state.availablePoints)
+  //   .changeValueBy((ability: CharacterAbilityScore) => ability.full === abilityScore, step) // apply the change. won't alter if there are not enough points or go out of bounds
+  //   .updateModifiers() // *then* update the modifiers with the racial bonuses included
+  //   .toValue(); // finally return the values and points remaining.
   
-  const afterValues = abilityScores.map((score: CharacterAbilityScore) => score.value);
+  // const afterValues = abilityScores.map((score: CharacterAbilityScore) => score.value);
 
-  console.log({ beforeValues, afterValues, beforePts });
-  // console.log({functor, abilityScores: state.abilityScores});
-  // const idx = state.abilityScores.findIndex((a: CharacterAbilityScore) => a.full === abilityScore);
-  // const abilityScores = state.abilityScores.slice();
-  // let availablePoints = state.availablePoints;
-  
-  // const attr = abilityScores[idx];
-  // const value = attr.value;
-  // const [prevCost, cost] = abilityScoreCost([value, value + step]);
-  
-  // if (step === 1) {
-  //   availablePoints -= cost - prevCost;
-  // } else {
-  //   availablePoints += Math.abs(prevCost - cost);
-  // }
-
-  // if (value + step < 8 || value + step > 15 || availablePoints < 0) {
-  //   return state;
-  // }
-
-  // let racialBonus = 0;
-  // if (state.race) {
-  //   racialBonus += state.race.abilityScores[idx];
-  // }
-
-  // abilityScores[idx] = Object.assign({}, attr, {
-  //   value: attr.value + step,
-  //   modifier: getModifier(attr.value + step + racialBonus)
-  // });
-
-  // const skills = updateSkills(state.skills, abilityScore as AbilityName, abilityScores[idx].modifier);
-  return Object.assign({}, state, { abilityScores, availablePoints });
+  // console.log({ beforeValues, afterValues, beforePts });
+  // return Object.assign({}, state, { abilityScores, availablePoints });
 }
 
 function resetPoints(state: CharacterBuildState): CharacterBuildState {

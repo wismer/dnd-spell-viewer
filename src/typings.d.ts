@@ -74,8 +74,10 @@ export interface Character {
 export interface CharacterAbilityScore {
   short: string;
   full: string;
-  value: number;
+  racialBonus: number;
+  playerBonus: number;
   modifier: number;
+  readonly baseValue: number;
 }
 
 interface BaseClass {
